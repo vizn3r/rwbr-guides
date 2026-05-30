@@ -10,6 +10,10 @@ Four AC buses plus DC backup. Electricity flows top to bottom: offsite → start
 | **Emergency Bus** | Batteries (trickle-charged from Safety Bus) | Emergency lights, panel controls |
 | **DC Bus** | Safety Bus normally, Emergency Bus on failure | Control room lights, ventilation, diesel ignition |
 
+```flow
+Main Bus A → Safety Bus → Emergency Bus → DC Bus
+```
+
 ```nerd
 f = (N/60) × (poles/2). At 3600 RPM with 1 pole pair: 3600/60 × 1 = 60 Hz exactly. That is why 3600 is the sync target for a US grid turbine. A 4-pole machine runs at 1800 RPM, 6-pole at 1200 RPM. Off-phase connection forces the generator to instantly jump to grid phase. The torque pulse is proportional to the phase difference and can shear coupling bolts in a real plant even at 30° off.
 ```
@@ -17,6 +21,16 @@ f = (N/60) × (poles/2). At 3600 RPM with 1 pole pair: 3600/60 × 1 = 60 Hz exac
 ## Startup
 
 Both buses start on the startup transformer. Only one pump per pair is available (others are on Bus B, except both recirc pumps, which are on Bus A). After sync, both buses transfer to the turbine generator.
+
+```flow
+Offsite → Startup Transformer → Main Bus A → Recirc Pumps
+```
+
+After sync:
+
+```flow
+Turbine Generator → Bus A → Bus B
+```
 
 ```u1
 Bus selector switches are at the **bottom of the vertical panel**.
@@ -83,6 +97,10 @@ Three subsystems that must be running before the EDG can start: **Compressor** (
 ---
 
 ## Checklist: EDG refueling
+
+```flow
+Open Main Valve → Open EDG Valve → Fuel Pump On → Pump Off → Close Valves
+```
 
 1. Fully open the **Main Valve** (opposite corner from the control room).
    > Opens the path from main storage tank to the EDG feed lines.

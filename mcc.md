@@ -4,8 +4,8 @@ Manages the closed water loop. Most demanding panel, needs constant attention.
 
 ## Water flow path
 
-```
-Reactor → Turbine → Hotwell → Condensate pumps → Deaerator → Feedwater pumps → Reactor
+```flow
+Reactor → Turbine → Hotwell → Condensate Pumps → Deaerator → Feedwater Pumps → Reactor
 ```
 
 2 feedwater pumps + 2 condensate pumps. Feedwater pumps: inlet → pump → outlet. Condensate pumps share one valve, single pump handles up to 50% flow; above that, switch on the second.
@@ -48,7 +48,7 @@ Hotwell rising + deaerator dropping → raise condensate valve. Deaerator rising
 ```
 
 ```u2
-**Dump valve:** does NOT drain hotwell directly. It is a bypass before the deaerator and only works with condensate pumps running. To lower hotwell: open dump valve + raise condenser valve to keep deaerator inflow the same. If dump valve is 100% open, no water reaches the deaerator regardless of condenser pump setting.
+**Dump valve:** does NOT drain hotwell directly. It is a bypass before the deaerator and only works with condensate pumps running. To lower hotwell: open dump valve + raise condenser valve to keep deaerator inflow the same. To lower reactor level: open dump valve + reduce feedwater to keep the deaerator at its level. If dump valve is 100% open, no water reaches the deaerator regardless of condenser pump setting.
 ```
 
 ## Preheaters

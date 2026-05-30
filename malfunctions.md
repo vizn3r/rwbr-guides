@@ -65,6 +65,10 @@ Keep steam flow and reactor power constant during the SJAE test. Both SJAEs can 
 
 ## Checklist: Repair procedure
 
+```flow
+Shut Off → Yellow Tag → Call Technician → Red Tag → Repair
+```
+
 1. Shut off the faulty device.
    > At high reactor power you may need to lower power first before shutting down a feedwater or condenser pump.
 
@@ -92,6 +96,10 @@ A persistent MCC auto-mode makeup-water draw, with no other explanation, is a st
 ---
 
 ## Checklist: Leak check procedure
+
+```flow
+Cold Shutdown → Call Maintenance → Leak Check 5 min → Repair
+```
 
 1. Bring the reactor to **cold shutdown** (~50 °C).
    > RHR does this in 30-60 minutes from full operating temp.

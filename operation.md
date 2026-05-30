@@ -20,20 +20,24 @@ Generator output (after site loads) must be within **±50 MW** of demand.
 ]
 ```
 
+```flow
+Set Reactor Power → Hold 7.1 MPa → Match Demand → Small Trim → repeat
+```
+
 ```classic
 Adjust demand with recirc flow above 30%, rods below. Both respond well. If turbine trips, APRM auto-reduces to 10% without manual input.
 ```
 
 ```stable
-Keep both recirc pumps running. If one trips, immediately reduce power target — the reactor cannot hold high power on one pump alone. After a turbine trip, APRM does not drop as fast as on Classic; watch it closely and insert rods manually if it stays high.
+Keep both recirc pumps running. If one trips, immediately reduce power target; the reactor cannot hold high power on one pump alone. After a turbine trip, APRM does not drop as fast as on Classic; watch it closely and insert rods manually if it stays high.
 ```
 
 ```selfcirc
-Use rods for all power changes. Adjusting recirc flow does almost nothing. After changing rod position, wait longer than usual before making another move — the reactor damps slowly and you will overshoot if you chase. Xenon oscillations are hard to predict; hold your setpoint and let it settle.
+Use rods for all power changes. Adjusting recirc flow does almost nothing. After changing rod position, wait longer than usual before making another move, because the reactor damps slowly and you will overshoot if you chase. Xenon oscillations are hard to predict; hold your setpoint and let it settle.
 ```
 
 ```rbmk
-Use rods to raise power, never recirc. To lower power slightly, you can increase recirc flow (it lowers reactivity on this type) — but rods are more predictable. Never let APRM drop below ~58% (700 MW thermal). If demand requires a big reduction, push through the 700 MW zone quickly with rod insertions. After any turbine trip, insert rods immediately — a brief power spike is possible as steam conditions in the core shift.
+Use rods to raise power, never recirc. To lower power slightly, you can increase recirc flow (it lowers reactivity on this type), but rods are more predictable. Never let APRM drop below ~58% (700 MW thermal). If demand requires a big reduction, push through the 700 MW zone quickly with rod insertions. After any turbine trip, insert rods immediately; a brief power spike is possible as steam conditions in the core shift.
 ```
 
 1. Set rough reactor power so output ≈ demand.

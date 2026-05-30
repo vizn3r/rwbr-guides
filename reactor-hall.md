@@ -43,6 +43,10 @@ Once those are met, the refueling controls unlock; the monitor displays the full
 
 The refueling procedure is a 17-step disassemble → refuel → reassemble cycle:
 
+```flow
+Disassemble → Flood Cavity → Refuel → Drain → Reassemble
+```
+
 1. Disassemble Reactor Shield
    > 3 pieces. Use the crane procedure on each.
 
@@ -101,6 +105,10 @@ Before starting, verify both the refueling unit and the crane have power (panel 
 ## Checklist: Crane procedure (used in every disassembly step)
 
 For each component:
+
+```flow
+Horizontal → Vertical → Hook → Horizontal → Vertical → Unhook
+```
 
 1. Set crane mode to **Horizontal** → press Crane Operation Button
    > Horizontal travel moves the crane head over the target.

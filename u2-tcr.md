@@ -47,6 +47,10 @@ Three power sources per system:
 
 Use Aux below 1800 RPM. Switch to Shaft after 1800 RPM (high-pitched alarm signals this). Above 2000 RPM leaving Aux on trips it on high pressure (both pumps fighting the same header).
 
+```flow
+Aux <1800 RPM → Shaft >1800 RPM
+```
+
 Lube pressure is directly proportional to hydraulic pressure. If either hits red, turbine trips.
 
 ```nerd
@@ -127,6 +131,10 @@ Earn the "Game Inside a Game" badge by playing Pong on the right monitor. Press 
 ---
 
 ## Checklist: TCR run-up
+
+```flow
+Oil Valves → Aux Pumps → Balance Oil Temp → Vacuum → Sealing → Preheat >240C → Run-up → Shaft Pumps
+```
 
 1. Open Main, Aux, and Emergency oil valves to **100%**.
    > Full flow path open so oil can reach bearings as soon as a pump is running.

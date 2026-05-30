@@ -55,6 +55,10 @@ In a full crew each person owns one part of the cycle:
 
 Power flows: offsite → startup transformer → Main Bus A → pumps. After the turbine syncs to the grid, both buses switch to the turbine generator.
 
+```flow
+Offsite → Startup Transformer → Main Bus A → Pumps
+```
+
 If offsite power is lost: turbine trips, pumps stop, SCRAM. Emergency cooling: RCIC (steam-driven, no power needed), then RHR once diesel generators are running.
 
 ## Key limits to always know

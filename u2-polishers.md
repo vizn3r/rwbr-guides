@@ -61,6 +61,10 @@ High polisher conductivity (or both polishers in bypass) can trip FW, RC, and Co
 
 ## Checklist: Cleaning a polisher
 
+```flow
+Bypass → Water Flush → Air Flush → Load Resin → Recirc Check → Un-bypass → Regenerate Tank
+```
+
 1. Bypass the polisher (coordinate with MCR first).
    > MCR must switch to the other polisher before you bypass.
 

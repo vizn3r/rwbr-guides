@@ -1,4 +1,4 @@
-# Reactor Types
+# Reactor Types & Server Config
 
 The config board (Server Configuration) lets you pick a reactor type. Changing the type only swaps the physics; the visuals of the control room stay the same. **Classic** is the default for both U1 and U2.
 
@@ -43,3 +43,25 @@ In an RBMK, graphite moderates the neutrons; water's role is primarily neutron a
 
 The Self-Circulating type in the sim removes the negative void coefficient from the BWR design: natural circulation handles moderation without forced flow, and the reactor relies almost entirely on temperature feedback for stability. PWRs behave similarly. Their water is a moderator AND a coolant, but the primary system is pressurized above the boiling point, so void fraction stays near zero and the Doppler temperature coefficient does all the stabilizing work.
 ```
+
+---
+
+## Server Configuration (SC Board)
+
+A monitor in U1 or U2 MCR. **Requires the Server Configuration gamepass.**
+
+### Functions
+- Start or end any event (Maintenance, LOOP, Reactor Safety Test)
+- Enable or disable random malfunctions server-wide
+- Enable or disable random events server-wide
+- Change the reactor type
+
+### Etiquette
+
+```warn
+Don't use the SC Board on public servers without majority player approval. Changing reactor type or triggering events without consent will get you kicked.
+```
+
+**Senior Operators+** can disable auto controls server-wide, useful for training or max-points contests.
+
+Some Demand Manager actions require events AND malfunctions ON in U2 SC, both reactors running, and ≥5 players. The RST event can be canceled without the gamepass via RCIC, startup transformer, or re-engaging Rolldown Main BUS Protection.

@@ -26,6 +26,10 @@ P(t) = P0 · exp(t / T). A 20-second period doubles power in about 14 seconds. A
 - **IPR:** bridge between source and power range. Multiple levels stepped through as power rises.
 - **APRM:** main power meter from ~1% to 125%.
 
+```flow
+SRM → IPR → APRM
+```
+
 ```limits
 [
   {"name":"APRM normal", "val":"100", "unit":"%"},
@@ -108,6 +112,10 @@ RWM exists because BWRs are unstable at low powers. No negative void coefficient
 
 Once thermal power reaches ~20-30%, stop pulling rods and shift to recirculation flows. More precise, safer, loss of power kills circulation and power drops automatically. Don't touch rods again unless in an emergency.
 
+```flow
+Rods <30% → Recirc >30%
+```
+
 ```classic
 **Classic (default):** standard BWR with moderate natural circulation. Both rods and forced recirc are effective. APR responds quickly to turbine trips. Most accurate representation of real BWR physics.
 ```
@@ -155,9 +163,99 @@ Both rods and circulation flow can hit their limits (0% or 100%) and stop respon
 The 200% local maximum is realistic. Power distribution in a BWR core has natural cosine-shaped peaks radially and axially. The key safety metric is the Critical Power Ratio (CPR): ratio of bundle power that would cause boiling transition (dryout) to actual bundle power. BWRs operate in bulk boiling normally, but if heat flux gets high enough that the liquid film on the fuel rod dries out, heat transfer collapses and cladding fails. Minimum CPR must stay above ~1.2-1.3. The autobalancer flattens the distribution, lowering peak power and raising the minimum CPR, allowing higher total reactor power safely.
 ```
 
+## Automatic Thermal Power Control
+
+Lets the computer move rods and adjust recirculation flow to hit a desired power setpoint. **Earns fewer points** than manual operation.
+
+### POAH
+
+~**1% APRM**. Below POAH, fission energy is too low to measurably raise temperature. Above it the reactor produces useful heat and temperature climbs.
+
+### Setpoints
+
+| APR | Meaning |
+|-----|---------|
+| 1% | POAH, initial warmup |
+| 5% | Enough power to start the turbine |
+| 10% | Enough to sync the turbine (only after pressure hits 7100 kPa) |
+| 20% | Build pressure to 7100 kPa, then enable auto pressure hold |
+| 30% | Upper rod-block safety limit |
+
+### Operational modes
+
+```u1
+Two modes on the U1 regulator:
+
+- **Absorber movement mode** (left button): auto controls rod insertion/withdrawal to lengthen or shorten period.
+- **Recirculation mode**: auto controls the two recirc pumps to change flow and power.
+```
+
+```u2
+Three modes on the U2 auto control:
+
+- **Circulation mode**: auto controls recirc pump speed.
+- **Rods mode**: auto controls all rod movement.
+- **Group mode**: same as Rods but only selected rod groups can move. Useful for manual balancing: let Group auto hold total power while you manually trim selected groups.
+```
+
+### Reactor type behavior
+
+```classic
+**Classic:** normal two-regime operation. Both absorber and recirc regimes work as described below.
+```
+
+```stable
+**Stable:** recirc regime is even more important. No natural circulation means pumps do all the work. Stay in absorber regime longer before switching; recirc response may be sluggish at low power.
+```
+
+```selfcirc
+**Self-Circulating:** recirc regime has minimal effect. Without a negative void coefficient, recirculation cannot drive meaningful power changes. It can still be used for fine adjustments, but absorber (rods) mode should be used for all significant power changes. The Power-to-Flow map provides little useful guidance on this reactor type.
+```
+
+```rbmk
+**RBMK:** recirc has inverse effect. Increasing flow removes voids and *lowers* power. The auto recirc mode works backwards. Use absorber mode only. Do not use recirculation regime at all on RBMK.
+```
+
+### Two operating regimes (both units)
+
+```flow
+Absorber Regime <40% → Recirc Regime >40%
+```
+
+- **Absorber regime** (below ~40% APR): thermal power controlled by absorbers only. Both recirc pumps stay at minimum (28%). Trip setpoint: 40% APR, reaching it triggers changeover to recirculation.
+- **Recirculation regime** (above ~40% APR): recirc-flow control has proven unstable during testing. Recommended: set APR setpoint to desired level and ramp recirc pumps manually to the percentage from the Power-to-Flow map.
+
+```warn
+Ramping power too fast destabilizes the plant. Increase setpoints in small steps.
+```
+
+### Behavior
+
+The controller tries to smoothly reach and hold the setpoint. Oscillations can occur from the negative temperature coefficient or xenon transients. If xenon burnoff drives recirc flow close to 0%, insert rods manually to give the circulation system more margin. If the circulation system hits its limit (alarm sounds), switch to absorber mode.
+
+### Power-to-Flow map
+
+```u2
+On the back wall of U2 MCR. Describes the allowed operating region between reactor power and recirculation flow.
+
+- **Low flow + high power:** forbidden. Density wave oscillations.
+- **High flow + low power:** wasteful but safe
+- **Diagonal corridor:** normal operating line, raise power and flow together
+
+Stay inside the corridor. Auto thermal follows it; manual operators must respect it too.
+```
+
+```nerd
+The forbidden low-flow/high-power region triggers density wave oscillations (DWO): a perturbation in flow creates a pressure wave, which changes void fraction, which changes density, which changes flow. If conditions are right, the feedback reinforces itself and the oscillation grows. Real BWRs enforce a strict P-F operating boundary because sustained DWO causes cyclic mechanical stress on fuel rods.
+```
+
 ---
 
 ## Checklist: Recirculation pump start order
+
+```flow
+Open Inlet → Start Pump → Open Outlet
+```
 
 1. Open the inlet valve.
    > Suction-side water before the pump spins, otherwise it cavitates.

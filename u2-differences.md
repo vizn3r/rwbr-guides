@@ -12,8 +12,8 @@ Unit 2 runs the same reactor model as Unit 1, so the underlying operations are s
 | Turbine control | Single panel | Dedicated [Turbine Control Room](u2-tcr) with a separate operator |
 | Synchronization | Breaker 52G1 | Synchroscope alignment required for everyone, plus a precision valve |
 | Polishers | Two small levers | Full polisher control room with regeneration, conductivity lab, and the [FWP Bay](u2-fwp) |
-| CRD system | Implicit | [2 CRDPs + Drive Water Flow + Hydraulic Accumulators](u2-reactor) that must be filled before startup or after a SCRAM |
-| Emergency systems | Far-left MCR panel | On the Supervisor Desk. Draw from [Condensate Storage](u2-condensate) tanks |
+| CRD system | Implicit | [2 CRDPs + Drive Water Flow + Hydraulic Accumulators](reactor-control#crd-system) that must be filled before startup or after a SCRAM |
+| Emergency systems | Far-left MCR panel | On the Supervisor Desk. Draw from [Condensate Storage](mcc#condensate-storage-tanks) tanks |
 | RCIC valves | 2 (Steam Relief + Inlet) | 1 (Inlet only) |
 | LPCI | Auto-activates at -4 m + low pressure | Manual only. CST selection valve. Pump speed cannot be throttled, can overflow |
 | Deaerator | No rupture disk | Breakable rupture disk that requires manual replacement |

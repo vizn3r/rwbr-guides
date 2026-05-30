@@ -1,19 +1,23 @@
 # Shutdown
 
+```flow
+Reduce Power → Recirc Walk-down → Rods <30% → Trip Turbine → Insert Rods → RHR → Cold Shutdown 50C
+```
+
 ```classic
 Reduce recirc flow to walk power down above 30%, then switch to rods below 30%. Turbine trip auto-reduces APRM to 10%. Switch electrical to offsite before tripping the turbine.
 ```
 
 ```stable
-Reduce recirc flow to walk down above 30%. Turbine trip will NOT auto-reduce power as reliably — watch APRM after the trip and insert rods manually if it stays above 10-15%. If a recirc pump fails mid-shutdown, you may need to SCRAM rather than continue manually.
+Reduce recirc flow to walk down above 30%. Turbine trip will NOT auto-reduce power as reliably; watch APRM after the trip and insert rods manually if it stays above 10-15%. If a recirc pump fails mid-shutdown, you may need to SCRAM rather than continue manually.
 ```
 
 ```selfcirc
-Use rods to walk down — recirc has no real authority. After tripping the turbine, APRM may not drop as sharply as on Classic since recirc was not carrying the load. Insert rods to bring it down.
+Use rods to walk down; recirc has no real authority. After tripping the turbine, APRM may not drop as sharply as on Classic since recirc was not carrying the load. Insert rods to bring it down.
 ```
 
 ```rbmk
-Use rods to walk down. Push through the 700 MW threshold quickly — do not hold at 700-800 MW for extended time. Once below 700 MW the reactor is in the unstable zone, get to cold shutdown fast. After the turbine trips, insert rods immediately; a power spike is possible as steam voids shift in the core.
+Use rods to walk down. Push through the 700 MW threshold quickly; do not hold at 700-800 MW for extended time. Once below 700 MW the reactor is in the unstable zone, get to cold shutdown fast. After the turbine trips, insert rods immediately; a power spike is possible as steam voids shift in the core.
 ```
 
 ```u1

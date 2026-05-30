@@ -40,7 +40,7 @@ U2: Once Halon dispenses, Turbine Hall, Condenser Hall, and FWP Bay are unsafe f
 ```
 
 ```stable
-**Turbine trip:** APRM will not drop to 10% as fast as on Classic. Watch it — if it stays above 20% after the trip, insert rods manually. Do not assume the auto-reduction handled it.
+**Turbine trip:** APRM will not drop to 10% as fast as on Classic. Watch it; if it stays above 20% after the trip, insert rods manually. Do not assume the auto-reduction handled it.
 ```
 
 ```selfcirc
@@ -50,7 +50,7 @@ U2: Once Halon dispenses, Turbine Hall, Condenser Hall, and FWP Bay are unsafe f
 ```rbmk
 **Turbine trip:** insert rods the moment the turbine trips. Do not wait. Steam voids in the core shift when turbine steam flow stops, and reactivity can spike briefly. Get rods in fast.
 
-**SCRAM from low power:** if you were below 700 MW when the SCRAM happened, restart is dangerous. Xenon will peak rapidly on a poisoned low-power core. Wait for xenon to decay before attempting restart — attempting to fight a xenon pit on RBMK by pulling rods is what caused Chernobyl.
+**SCRAM from low power:** if you were below 700 MW when the SCRAM happened, restart is dangerous. Xenon will peak rapidly on a poisoned low-power core. Wait for xenon to decay before attempting restart; attempting to fight a xenon pit on RBMK by pulling rods is what caused Chernobyl.
 ```
 
 ---
@@ -101,6 +101,10 @@ U2: Once Halon dispenses, Turbine Hall, Condenser Hall, and FWP Bay are unsafe f
 
 ## Checklist: Loss of offsite power (unannounced)
 
+```flow
+SCRAM → RCIC → DC to Emergency Bus → Start EDGs → Safety Bus → RHR + LPCI → Cold Shutdown
+```
+
 ```u1
 1. [!] SCRAM the reactor immediately.
    > Main pumps are dead. RCIC is your only cooling.
@@ -143,6 +147,10 @@ U2: Once Halon dispenses, Turbine Hall, Condenser Hall, and FWP Bay are unsafe f
 ## Islanding
 
 Both units can island. Isolates the unit from the offsite grid: both buses run on the turbine generator, not synced to the network. Turbine speed varies 3400-3800 RPM; site loads drag on it and the operator keeps it in band.
+
+```flow
+Match Site Load → Desync → Hold 3400-3800 RPM
+```
 
 - If offsite loss is **announced**: prepare for islanding
 - If **unannounced**: SCRAM and recover (above)

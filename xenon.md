@@ -4,6 +4,10 @@ Iodine-135 and Xenon-135 are fission products that affect reactor reactivity wit
 
 ## How it works
 
+```flow
+Fission → Te-135 → I-135 → Xe-135 → Cs-135
+```
+
 Iodine-135 is produced directly by fission, in proportion to reactor power. The Iodine-135 indicator is scaled so its concentration percent corresponds to the percent of reactor thermal power. If power is above the iodine concentration, iodine rises. If power is below, iodine falls as it decays into Xenon-135.
 
 Xenon-135 is a very strong neutron absorber. High xenon poisons the reactor, making it harder to reach or sustain criticality. The higher the iodine level, the faster xenon rises.

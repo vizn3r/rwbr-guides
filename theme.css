@@ -1,0 +1,131 @@
+/* ==================================================================
+   THEME TOKENS
+   ================================================================== */
+
+/* Fallback (light) – used if no data-theme attribute is present */
+:root {
+    --bg: #f5f4ef;
+    --bg-panel: #ffffff;
+    --bg-soft: #ecebe5;
+    --bg-code: #ebe9e1;
+    --tx: #1a1a18;
+    --tx-dim: #1a1a18;
+    --tx-mute: #1a1a18;
+    --br: rgba(26, 26, 24, 0.14);
+    --br-strong: rgba(26, 26, 24, 0.3);
+    --accent: #1a1a18;
+    --accent-on: #ffffff;
+
+    --ok-bg: #eaf3de;
+    --ok-br: #639922;
+    --ok-tx: #3b6d11;
+    --warn-bg: #faeeda;
+    --warn-br: #ba7517;
+    --warn-tx: #854f0b;
+    --crit-bg: #fcebeb;
+    --crit-br: #e24b4a;
+    --crit-tx: #a32d2d;
+    --info-bg: #e6f1fb;
+    --info-br: #4a7db5;
+    --info-tx: #185fa5;
+    --nerd-bg: transparent;
+    --nerd-br: var(--br);
+    --nerd-tx: var(--tx);
+    --step-why-br: #5a7a9e;
+}
+
+/* Explicit light theme (redundant, but safe) */
+html[data-theme="light"] {
+    --bg: #f5f4ef;
+    --bg-panel: #ffffff;
+    --bg-soft: #ecebe5;
+    --bg-code: #ebe9e1;
+    --tx: #1a1a18;
+    --tx-dim: #1a1a18;
+    --tx-mute: #1a1a18;
+    --br: rgba(26, 26, 24, 0.14);
+    --br-strong: rgba(26, 26, 24, 0.3);
+    --accent: #1a1a18;
+    --accent-on: #ffffff;
+
+    --ok-bg: #eaf3de;
+    --ok-br: #639922;
+    --ok-tx: #3b6d11;
+    --warn-bg: #faeeda;
+    --warn-br: #ba7517;
+    --warn-tx: #854f0b;
+    --crit-bg: #fcebeb;
+    --crit-br: #e24b4a;
+    --crit-tx: #a32d2d;
+    --info-bg: #e6f1fb;
+    --info-br: #4a7db5;
+    --info-tx: #185fa5;
+    --nerd-bg: transparent;
+    --nerd-br: var(--br);
+    --nerd-tx: var(--tx);
+    --step-why-br: #5a7a9e;
+}
+
+/* Dark mode (original) */
+html[data-theme="dark"] {
+    --bg: #000000;
+    --bg-panel: #0a0a0a;
+    --bg-soft: #181816;
+    --bg-code: #14140f;
+    --tx: #ebeae3;
+    --tx-dim: #ebeae3;
+    --tx-mute: #ebeae3;
+    --br: rgba(255, 255, 255, 0.13);
+    --br-strong: rgba(255, 255, 255, 0.28);
+    --accent: #ebeae3;
+    --accent-on: #000000;
+
+    --ok-bg: #0d2807;
+    --ok-br: #5fb84a;
+    --ok-tx: #b8e29c;
+    --warn-bg: #2e2008;
+    --warn-br: #d4942e;
+    --warn-tx: #f5c878;
+    --crit-bg: #2e0c0c;
+    --crit-br: #e85a5a;
+    --crit-tx: #ffb4b4;
+    --info-bg: #0a233f;
+    --info-br: #5e95c8;
+    --info-tx: #b8d4f0;
+    --nerd-bg: transparent;
+    --nerd-br: var(--br);
+    --nerd-tx: var(--tx);
+    --step-why-br: #3a5a7e;
+}
+
+/* OLED dark (pure black, high contrast) */
+html[data-theme="oled"] {
+    --bg: #000000;
+    --bg-panel: #000000;
+    --bg-soft: #0a0a0a;
+    --bg-code: #0f0f0f;
+    --tx: #ffffff;
+    --tx-dim: #f0f0f0;
+    --tx-mute: #cccccc;
+    --br: rgba(255, 255, 255, 0.15);
+    --br-strong: rgba(255, 255, 255, 0.3);
+    --accent: #ffffff;
+    --accent-on: #000000;
+
+    --ok-bg: #0a1c05;
+    --ok-br: #6fbf4c;
+    --ok-tx: #c0ffa0;
+    --warn-bg: #2a1f05;
+    --warn-br: #e0a23b;
+    --warn-tx: #ffdd99;
+    --crit-bg: #2a0a0a;
+    --crit-br: #ff6b6b;
+    --crit-tx: #ffc0c0;
+    --info-bg: #0a1a2a;
+    --info-br: #7aaef0;
+    --info-tx: #c0e0ff;
+    --nerd-bg: #0a0a0a;
+    --nerd-br: #2a2a2a;
+    --nerd-tx: #f0f0f0;
+    --step-why-br: #3a5a7e;
+}

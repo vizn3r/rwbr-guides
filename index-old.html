@@ -1,0 +1,1680 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <title>RBWR Operator Manual</title>
+        <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+        <style>
+            @font-face {
+                font-family: "Cascadia Code";
+                src: url("https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code/files/cascadia-code-latin-400-normal.woff2") format("woff2");
+                font-weight: 400;
+                font-style: normal;
+                font-display: swap;
+            }
+            @font-face {
+                font-family: "Cascadia Code";
+                src: url("https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code/files/cascadia-code-latin-600-normal.woff2") format("woff2");
+                font-weight: 600;
+                font-style: normal;
+                font-display: swap;
+            }
+            @font-face {
+                font-family: "Cascadia Code";
+                src: url("https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code/files/cascadia-code-latin-400-italic.woff2") format("woff2");
+                font-weight: 400;
+                font-style: italic;
+                font-display: swap;
+            }
+        </style>
+        <style>
+            /* ==================================================================
+   THEME TOKENS
+   ================================================================== */
+            :root {
+                /* Light mode (default) */
+                --bg: #f5f4ef;
+                --bg-panel: #ffffff;
+                --bg-soft: #ecebe5;
+                --bg-code: #ebe9e1;
+                --tx: #1a1a18;
+                --tx-dim: #1a1a18;
+                --tx-mute: #1a1a18;
+                --br: rgba(26, 26, 24, 0.14);
+                --br-strong: rgba(26, 26, 24, 0.3);
+                --accent: #1a1a18;
+                --accent-on: #ffffff;
+
+                --ok-bg: #eaf3de;
+                --ok-br: #639922;
+                --ok-tx: #3b6d11;
+                --warn-bg: #faeeda;
+                --warn-br: #ba7517;
+                --warn-tx: #854f0b;
+                --crit-bg: #fcebeb;
+                --crit-br: #e24b4a;
+                --crit-tx: #a32d2d;
+                --info-bg: #e6f1fb;
+                --info-br: #4a7db5;
+                --info-tx: #185fa5;
+                --nerd-bg: transparent;
+                --nerd-br: var(--br);
+                --nerd-tx: var(--tx);
+                --step-why-br: #5a7a9e;
+
+                --font: "Cascadia Code", "Cascadia Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+                --mono: "Cascadia Code", "Cascadia Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+                --r: 6px;
+                --rl: 10px;
+                --nav-w: 240px;
+                --top-h: 46px;
+                --filter-h: 38px;
+            }
+
+            body.dark {
+                /* Pure black background (OLED), but accent colors lifted so they read */
+                --bg: #000000;
+                --bg-panel: #0a0a0a;
+                --bg-soft: #181816;
+                --bg-code: #14140f;
+                --tx: #ebeae3;
+                --tx-dim: #ebeae3;
+                --tx-mute: #ebeae3;
+                --br: rgba(255, 255, 255, 0.13);
+                --br-strong: rgba(255, 255, 255, 0.28);
+                --accent: #ebeae3;
+                --accent-on: #000000;
+
+                --ok-bg: #0d2807;
+                --ok-br: #5fb84a;
+                --ok-tx: #b8e29c;
+                --warn-bg: #2e2008;
+                --warn-br: #d4942e;
+                --warn-tx: #f5c878;
+                --crit-bg: #2e0c0c;
+                --crit-br: #e85a5a;
+                --crit-tx: #ffb4b4;
+                --info-bg: #0a233f;
+                --info-br: #5e95c8;
+                --info-tx: #b8d4f0;
+                --nerd-bg: transparent;
+                --nerd-br: var(--br);
+                --nerd-tx: var(--tx);
+                --step-why-br: #3a5a7e;
+            }
+
+            /* ==================================================================
+   RESET + BASE
+   ================================================================== */
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            html,
+            body {
+                height: 100%;
+                font-family: var(--font);
+                background: var(--bg);
+                color: var(--tx);
+            }
+            body {
+                overflow: hidden;
+                transition:
+                    background 0.15s,
+                    color 0.15s;
+            }
+
+            /* ==================================================================
+   TOP BAR
+   ================================================================== */
+            .topbar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: var(--top-h);
+                background: var(--bg-panel);
+                border-bottom: 1px solid var(--br);
+                display: flex;
+                align-items: center;
+                z-index: 100;
+            }
+            .topbar-title {
+                padding: 0 18px;
+                font-size: 14px;
+                font-weight: 600;
+                letter-spacing: 0.02em;
+            }
+            .topbar-sub {
+                font-size: 11px;
+                color: var(--tx-mute);
+                font-family: var(--mono);
+                margin-left: 8px;
+            }
+            .topbar-spacer {
+                flex: 1;
+            }
+            .topbar-toggles {
+                display: flex;
+                gap: 6px;
+                padding-right: 14px;
+            }
+            .toggle-btn {
+                font-family: var(--mono);
+                font-size: 11px;
+                background: transparent;
+                color: var(--tx);
+                border: 1px solid var(--br);
+                padding: 5px 10px;
+                border-radius: var(--r);
+                cursor: pointer;
+                letter-spacing: 0.04em;
+                transition: all 0.12s;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .toggle-btn:hover {
+                border-color: var(--br-strong);
+                color: var(--tx);
+            }
+            .toggle-btn.active {
+                background: var(--accent);
+                color: var(--accent-on);
+                border-color: var(--accent);
+            }
+            .toggle-btn .dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: var(--tx-mute);
+            }
+            .toggle-btn.active .dot {
+                background: var(--accent-on);
+            }
+
+            /* ==================================================================
+   LAYOUT
+   ================================================================== */
+            .layout {
+                display: flex;
+                height: 100vh;
+                padding-top: calc(var(--top-h) + var(--filter-h));
+            }
+            .sidebar {
+                width: var(--nav-w);
+                background: var(--bg-panel);
+                border-right: 1px solid var(--br);
+                overflow-y: auto;
+                flex-shrink: 0;
+                padding: 12px 0 24px;
+                transition:
+                    width 0.18s ease,
+                    padding 0.18s ease;
+            }
+            body.sidebar-hidden .sidebar {
+                width: 0;
+                overflow: hidden;
+                padding: 0;
+                border-right: none;
+            }
+            .nav-group-title {
+                font-family: var(--mono);
+                font-size: 10px;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: var(--tx);
+                background: var(--bg-soft);
+                padding: 6px 18px;
+                margin-top: 8px;
+            }
+            .nav-item {
+                display: block;
+                width: 100%;
+                text-align: left;
+                background: transparent;
+                border: none;
+                color: var(--tx);
+                font-family: var(--font);
+                font-size: 13px;
+                padding: 6px 18px;
+                cursor: pointer;
+                border-left: 2px solid transparent;
+                transition: all 0.1s;
+            }
+            .nav-item:hover {
+                color: var(--tx);
+                background: var(--bg-soft);
+            }
+            .nav-item.active {
+                color: var(--tx);
+                border-left-color: var(--accent);
+                background: var(--bg-soft);
+                font-weight: 500;
+            }
+
+            /* ==================================================================
+   CONTENT
+   ================================================================== */
+            .content {
+                flex: 1;
+                overflow-y: auto;
+                padding: 32px 48px 64px;
+                max-width: 100%;
+            }
+            .content-inner {
+                max-width: 820px;
+                margin: 0 auto;
+            }
+
+            /* Markdown styles */
+            .md h1 {
+                font-size: 28px;
+                font-weight: 600;
+                margin-bottom: 6px;
+                letter-spacing: -0.01em;
+            }
+            .md .page-meta {
+                font-family: var(--mono);
+                font-size: 11px;
+                color: var(--tx);
+                background: var(--bg-soft);
+                margin-bottom: 24px;
+                padding: 6px 10px 6px;
+                border-radius: var(--r);
+            }
+            .md h2 {
+                font-size: 18px;
+                font-weight: 600;
+                margin: 28px 0 10px;
+                padding-bottom: 4px;
+                border-bottom: 1px solid var(--br);
+            }
+            .md h3 {
+                font-size: 15px;
+                font-weight: 600;
+                margin: 20px 0 8px;
+                color: var(--tx);
+            }
+            .md p {
+                margin: 8px 0 12px;
+                line-height: 1.55;
+                font-size: 14px;
+            }
+            .md ul,
+            .md ol {
+                margin: 8px 0 14px;
+                padding-left: 28px;
+            }
+            .md ul li,
+            .md ol li {
+                margin: 4px 0;
+                line-height: 1.55;
+                font-size: 14px;
+            }
+            .md ul li::marker {
+                color: var(--tx-mute);
+            }
+            .md strong {
+                font-weight: 600;
+            }
+            .md em {
+                font-style: italic;
+            }
+            .md code {
+                font-family: var(--mono);
+                font-size: 12.5px;
+                background: var(--bg-code);
+                padding: 1px 5px;
+                border-radius: 3px;
+                border: 1px solid var(--br);
+            }
+            .md pre {
+                background: var(--bg-code);
+                border: 1px solid var(--br);
+                border-radius: var(--r);
+                padding: 12px 14px;
+                overflow-x: auto;
+                margin: 12px 0;
+            }
+            .md pre code {
+                background: none;
+                padding: 0;
+                border: none;
+                font-size: 12.5px;
+                line-height: 1.5;
+            }
+            .md table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 12px 0 16px;
+                font-size: 13px;
+            }
+            .md table th,
+            .md table td {
+                border: 1px solid var(--br);
+                padding: 7px 10px;
+                text-align: left;
+                vertical-align: top;
+            }
+            .md table th {
+                background: var(--bg-soft);
+                font-weight: 600;
+                font-size: 12px;
+                letter-spacing: 0.02em;
+            }
+            .md table tr:nth-child(even) td {
+                background: var(--bg-soft);
+            }
+
+            /* Callouts */
+            .callout {
+                margin: 14px 0;
+                padding: 10px 14px;
+                border-radius: var(--r);
+                border: 1px solid;
+                font-size: 13.5px;
+                line-height: 1.5;
+            }
+            .callout-label {
+                display: inline-block;
+                font-family: var(--mono);
+                font-size: 10px;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                padding: 2px 7px;
+                border-radius: 3px;
+                margin-right: 8px;
+                font-weight: 600;
+            }
+            .callout.note {
+                background: var(--info-bg);
+                border-color: var(--info-br);
+                color: var(--info-tx);
+            }
+            .callout.note .callout-label {
+                background: var(--info-br);
+                color: #fff;
+            }
+            .callout.warn {
+                background: var(--warn-bg);
+                border-color: var(--warn-br);
+                color: var(--warn-tx);
+            }
+            .callout.warn .callout-label {
+                background: var(--warn-br);
+                color: #fff;
+            }
+            .callout.crit {
+                background: var(--crit-bg);
+                border-color: var(--crit-br);
+                color: var(--crit-tx);
+            }
+            .callout.crit .callout-label {
+                background: var(--crit-br);
+                color: #fff;
+            }
+
+            /* Limit cards */
+            .limits-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 8px;
+                margin: 14px 0;
+            }
+            .limit-card {
+                border: 1px solid var(--br);
+                background: var(--bg-soft);
+                padding: 8px 10px;
+                border-radius: var(--r);
+            }
+            .limit-card.warn {
+                background: var(--warn-bg);
+                border-color: var(--warn-br);
+                color: var(--warn-tx);
+            }
+            .limit-card.danger {
+                background: var(--crit-bg);
+                border-color: var(--crit-br);
+                color: var(--crit-tx);
+            }
+            .limit-card.ok {
+                background: var(--ok-bg);
+                border-color: var(--ok-br);
+                color: var(--ok-tx);
+            }
+            .limit-name {
+                font-family: var(--mono);
+                font-size: 9.5px;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                opacity: 0.78;
+                margin-bottom: 4px;
+            }
+            .limit-val {
+                font-family: var(--mono);
+                font-size: 18px;
+                font-weight: 500;
+            }
+            .limit-unit {
+                font-size: 11px;
+                opacity: 0.7;
+                margin-left: 3px;
+            }
+
+            /* Procedure / checklist steps (one unified thing)
+   Any numbered list that contains at least one blockquote-style "why"
+   becomes interactive: click to toggle done, state persists per page. */
+            .md ol.steps {
+                list-style: none;
+                padding-left: 0;
+                counter-reset: step-counter;
+                margin: 16px 0;
+            }
+            .md ol.steps > li {
+                counter-increment: step-counter;
+                display: grid;
+                grid-template-columns: 28px 1fr;
+                column-gap: 14px;
+                row-gap: 6px;
+                padding: 9px 10px 9px 6px;
+                border-bottom: 1px solid var(--br);
+                cursor: pointer;
+                user-select: none;
+                align-items: start;
+                transition:
+                    background 0.1s,
+                    opacity 0.15s;
+            }
+            .md ol.steps > li:first-child {
+                border-top: 1px solid var(--br);
+            }
+            .md ol.steps > li:hover {
+                background: var(--bg-soft);
+            }
+            .md ol.steps > li::before {
+                content: counter(step-counter);
+                font-family: var(--mono);
+                font-size: 12.5px;
+                font-weight: 500;
+                color: var(--tx-mute);
+                text-align: right;
+                padding-top: 1px;
+                grid-column: 1;
+                grid-row: 1;
+            }
+            .md ol.steps > li.crit::before {
+                color: var(--crit-br);
+                font-weight: 700;
+            }
+            .md ol.steps > li.done::before {
+                content: "✓";
+                color: var(--ok-br);
+                font-weight: 700;
+            }
+            .md ol.steps > li.done > p,
+            .md ol.steps > li.done > .step-main {
+                text-decoration: line-through;
+                text-decoration-thickness: 1px;
+                color: var(--tx-mute);
+            }
+            .md ol.steps > li.done > .step-why {
+                opacity: 0.6;
+            }
+            .md ol.steps > li > *:not(.step-why) {
+                grid-column: 2;
+                margin: 0;
+            }
+            .md ol.steps > li > p {
+                font-size: 14px;
+                line-height: 1.45;
+                margin: 0;
+            }
+            .md ol.steps > li > .step-why {
+                grid-column: 2;
+                margin: 2px 0 0;
+                font-size: 12.5px;
+                line-height: 1.45;
+                color: var(--tx);
+                font-style: italic;
+                background: var(--bg-soft);
+                border-radius: var(--r);
+                padding: 4px 10px;
+            }
+            .md ol.steps > li > .step-why p {
+                margin: 0;
+                font-size: 12.5px;
+            }
+
+            /* Page-level steps progress bar (sits at the bottom of the checklist) */
+            .steps-progress {
+                margin: 18px 0 0;
+                padding: 12px 0 0;
+                border-top: 1px solid var(--br);
+                display: flex;
+                align-items: center;
+                gap: 14px;
+            }
+            .steps-progress-bar {
+                flex: 1;
+                height: 4px;
+                background: var(--bg-soft);
+                border-radius: 2px;
+                overflow: hidden;
+            }
+            .steps-progress-fill {
+                height: 100%;
+                background: var(--ok-br);
+                transition: width 0.25s;
+            }
+            .steps-progress-label {
+                font-family: var(--mono);
+                font-size: 11px;
+                color: var(--tx-mute);
+                min-width: 60px;
+                text-align: right;
+            }
+            .steps-progress-reset {
+                font-family: var(--mono);
+                font-size: 10px;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+                background: transparent;
+                border: 1px solid var(--br);
+                color: var(--tx);
+                padding: 5px 10px;
+                border-radius: var(--r);
+                cursor: pointer;
+                transition: all 0.12s;
+            }
+            .steps-progress-reset:hover {
+                border-color: var(--br-strong);
+            }
+
+            /* Abbreviations: hover tooltip, no underline */
+            abbr[data-tip] {
+                text-decoration: none;
+                cursor: help;
+                position: relative;
+            }
+            abbr[data-tip]:hover::after {
+                content: attr(data-tip);
+                position: absolute;
+                bottom: calc(100% + 7px);
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--tx);
+                color: var(--bg);
+                border-radius: 5px;
+                padding: 5px 9px;
+                font-size: 11.5px;
+                font-family: var(--font);
+                font-weight: 500;
+                font-style: normal;
+                letter-spacing: 0.005em;
+                white-space: nowrap;
+                z-index: 50;
+                pointer-events: none;
+                line-height: 1.3;
+            }
+            abbr[data-tip]:hover::before {
+                content: "";
+                position: absolute;
+                bottom: calc(100% + 1px);
+                left: 50%;
+                transform: translateX(-50%);
+                border: 5px solid transparent;
+                border-top-color: var(--tx);
+                border-bottom: 0;
+                z-index: 50;
+                pointer-events: none;
+            }
+
+            /* Nerd-only blocks (hidden by default, shown when body.nerd is on) */
+            .nerd-block,
+            .step-why {
+                display: none;
+            }
+            body.nerd .nerd-block {
+                display: block;
+            }
+            body.nerd ol.steps .step-why {
+                display: block;
+            }
+
+            .nerd-block {
+                margin: 12px 0;
+                padding: 10px 14px;
+                background: var(--nerd-bg);
+                border: 1px solid var(--nerd-br);
+                border-radius: var(--r);
+                font-size: 13px;
+                line-height: 1.55;
+                color: var(--nerd-tx);
+            }
+            .nerd-block::before {
+                content: "nerd note";
+                display: block;
+                font-family: var(--mono);
+                font-size: 10px;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                opacity: 0.8;
+                margin-bottom: 5px;
+            }
+
+            /* ==================================================================
+   FLOWCHART
+   ================================================================== */
+            .flowchart {
+                display: flex;
+                flex-wrap: nowrap;
+                align-items: center;
+                margin: 16px 0;
+                padding: 20px;
+                background: var(--bg-soft);
+                border: 1px solid var(--br);
+                border-radius: var(--rl);
+                overflow-x: auto;
+            }
+            .flow-node {
+                background: var(--bg-panel);
+                border: 2px solid var(--tx);
+                border-radius: 4px;
+                padding: 8px 16px;
+                font-family: var(--mono);
+                font-size: 12px;
+                font-weight: 600;
+                white-space: nowrap;
+                position: relative;
+                z-index: 1;
+            }
+            .flow-arrow {
+                display: flex;
+                align-items: center;
+                flex-shrink: 0;
+            }
+            .flow-arrow::before {
+                content: "";
+                display: block;
+                width: 22px;
+                height: 2px;
+                background: var(--tx);
+            }
+            .flow-arrow::after {
+                content: "";
+                display: block;
+                width: 0;
+                height: 0;
+                border-top: 5px solid transparent;
+                border-bottom: 5px solid transparent;
+                border-left: 7px solid var(--tx);
+            }
+
+            /* Loading and error states */
+            .status {
+                padding: 20px;
+                font-family: var(--mono);
+                font-size: 13px;
+                color: var(--tx-mute);
+                text-align: center;
+            }
+
+            /* ==================================================================
+   HR + CHECKLIST SECTION DIVIDER
+   ================================================================== */
+            .md hr {
+                border: none;
+                border-top: 2px solid var(--br-strong);
+                margin: 36px 0 28px;
+            }
+            .md hr + h2 {
+                color: var(--accent);
+                border-bottom-color: var(--accent);
+                font-size: 15px;
+                letter-spacing: 0.01em;
+            }
+
+            /* ==================================================================
+   FILTER BAR
+   ================================================================== */
+            .filter-bar {
+                position: fixed;
+                top: var(--top-h);
+                left: 0;
+                right: 0;
+                height: var(--filter-h);
+                background: var(--bg-soft);
+                border-bottom: 1px solid var(--br);
+                display: flex;
+                align-items: center;
+                padding: 0 14px;
+                gap: 0;
+                z-index: 99;
+                overflow-x: auto;
+            }
+            .filter-group {
+                display: flex;
+                align-items: center;
+                gap: 2px;
+                padding-right: 12px;
+                margin-right: 12px;
+                border-right: 1px solid var(--br);
+                flex-shrink: 0;
+            }
+            .filter-group:last-child {
+                border-right: none;
+            }
+            .filter-group-label {
+                font-family: var(--mono);
+                font-size: 10px;
+                color: var(--tx);
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                margin-right: 6px;
+                white-space: nowrap;
+                background: var(--bg-code);
+                padding: 2px 6px;
+                border-radius: 3px;
+            }
+            .filter-btn {
+                font-family: var(--mono);
+                font-size: 11px;
+                background: transparent;
+                color: var(--tx);
+                border: 1px solid transparent;
+                border-radius: 4px;
+                padding: 3px 8px;
+                cursor: pointer;
+                white-space: nowrap;
+                transition: all 0.1s;
+                line-height: 1.4;
+            }
+            .filter-btn:hover {
+                color: var(--tx);
+                border-color: var(--br);
+            }
+            .filter-btn.active {
+                background: var(--accent);
+                color: var(--accent-on);
+                border-color: var(--accent);
+                font-weight: 600;
+            }
+
+            /* Unit/mode/reactor filtering - always one option selected, no "both" */
+            .u1-only,
+            .u2-only {
+                display: none;
+            }
+            .realistic-only,
+            .simple-only {
+                display: none;
+            }
+            .rbmk-only,
+            .stable-only,
+            .selfcirc-only,
+            .classic-only {
+                display: none;
+            }
+
+            body.unit-u1 .u1-only {
+                display: block;
+            }
+            body.unit-u2 .u2-only {
+                display: block;
+            }
+            body.mode-simple .simple-only {
+                display: block;
+            }
+            body.mode-realistic .realistic-only {
+                display: block;
+            }
+            body.reactor-classic .classic-only {
+                display: block;
+            }
+            body.reactor-stable .stable-only {
+                display: block;
+            }
+            body.reactor-selfcirc .selfcirc-only {
+                display: block;
+            }
+            body.reactor-rbmk .rbmk-only {
+                display: block;
+            }
+
+            /* ==================================================================
+   PRINT: show only the content, drop all chrome
+   ================================================================== */
+            /* Sidebar toggle button - always visible */
+            .menu-btn {
+                display: flex;
+                background: transparent;
+                border: none;
+                color: var(--tx);
+                padding: 0 14px;
+                cursor: pointer;
+                font-size: 18px;
+                line-height: var(--top-h);
+                align-items: center;
+            }
+            .menu-btn:hover {
+                color: var(--tx);
+            }
+            @media (max-width: 768px) {
+                .menu-btn {
+                    display: flex;
+                }
+                .sidebar {
+                    position: fixed;
+                    top: calc(var(--top-h) + var(--filter-h));
+                    left: 0;
+                    bottom: 0;
+                    z-index: 200;
+                    transform: translateX(-100%);
+                    transition: transform 0.2s ease;
+                    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.3);
+                    width: var(--nav-w) !important;
+                    overflow-y: auto !important;
+                    padding: 12px 0 24px !important;
+                }
+                .sidebar.open {
+                    transform: translateX(0);
+                }
+                .layout {
+                    padding-top: calc(var(--top-h) + var(--filter-h));
+                }
+                .content {
+                    padding: 20px 18px 48px;
+                }
+                .filter-bar {
+                    padding: 0 8px;
+                    gap: 0;
+                }
+                .filter-group {
+                    padding-right: 8px;
+                    margin-right: 6px;
+                }
+                .filter-btn {
+                    padding: 3px 6px;
+                    font-size: 10px;
+                }
+            }
+
+            /* Nav unit-2 hiding */
+            body.unit-u1 .nav-u2 {
+                display: none !important;
+            }
+
+            /* Mode filter only relevant for U2 */
+            body.unit-u1 .filter-group-mode {
+                display: none !important;
+            }
+
+            @media print {
+                .topbar,
+                .sidebar,
+                .filter-bar,
+                .menu-btn {
+                    display: none !important;
+                }
+                .layout {
+                    padding-top: 0 !important;
+                    height: auto;
+                    display: block;
+                }
+                .content {
+                    overflow: visible;
+                    padding: 0;
+                }
+                .content-inner {
+                    max-width: none;
+                }
+                body {
+                    overflow: visible;
+                    background: #fff;
+                    color: #000;
+                }
+                .steps-progress,
+                .steps-progress-reset {
+                    display: none !important;
+                }
+                .md ol.steps > li {
+                    break-inside: avoid;
+                }
+                .callout,
+                .limit-card,
+                .nerd-block {
+                    break-inside: avoid;
+                }
+
+                /* Respect unit filter */
+                body.unit-u1 .u2-only {
+                    display: none !important;
+                }
+                body.unit-u2 .u1-only {
+                    display: none !important;
+                }
+                /* Respect mode filter */
+                body.mode-simple .realistic-only {
+                    display: none !important;
+                }
+                body.mode-realistic .simple-only {
+                    display: none !important;
+                }
+                /* Respect reactor type filter */
+                .rbmk-only,
+                .stable-only,
+                .selfcirc-only,
+                .classic-only {
+                    display: none !important;
+                }
+                body.reactor-classic .classic-only {
+                    display: block !important;
+                }
+                body.reactor-stable .stable-only {
+                    display: block !important;
+                }
+                body.reactor-selfcirc .selfcirc-only {
+                    display: block !important;
+                }
+                body.reactor-rbmk .rbmk-only {
+                    display: block !important;
+                }
+                /* Respect nerd mode */
+                body:not(.nerd) .nerd-block {
+                    display: none !important;
+                }
+                body:not(.nerd) .step-why {
+                    display: none !important;
+                }
+                body.nerd .nerd-block {
+                    display: block !important;
+                }
+                body.nerd .step-why {
+                    display: block !important;
+                }
+            }
+        </style>
+    </head>
+    <body class="dark">
+        <div class="topbar">
+            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+            <div class="topbar-title">RBWR Operator Manual</div>
+            <div class="topbar-spacer"></div>
+            <div class="topbar-toggles">
+                <button class="toggle-btn" id="theme-toggle" onclick="toggleTheme()">
+                    <span class="dot"></span><span id="theme-label">dark</span>
+                </button>
+                <button class="toggle-btn" id="nerd-toggle" onclick="toggleNerd()"><span class="dot"></span><span>nerd mode</span></button>
+            </div>
+        </div>
+
+        <div class="filter-bar" id="filter-bar">
+            <div class="filter-group">
+                <span class="filter-group-label">unit</span>
+                <button class="filter-btn active" id="fb-unit-u1" onclick="setFilter('unit', 'u1')">U1</button>
+                <button class="filter-btn" id="fb-unit-u2" onclick="setFilter('unit', 'u2')">U2</button>
+            </div>
+            <div class="filter-group filter-group-mode">
+                <span class="filter-group-label">mode</span>
+                <button class="filter-btn active" id="fb-mode-simple" onclick="setFilter('mode', 'simple')">simple</button>
+                <button class="filter-btn" id="fb-mode-realistic" onclick="setFilter('mode', 'realistic')">realistic</button>
+            </div>
+            <div class="filter-group">
+                <span class="filter-group-label">reactor</span>
+                <button class="filter-btn active" id="fb-reactor-classic" onclick="setFilter('reactor', 'classic')">classic</button>
+                <button class="filter-btn" id="fb-reactor-stable" onclick="setFilter('reactor', 'stable')">stable</button>
+                <button class="filter-btn" id="fb-reactor-selfcirc" onclick="setFilter('reactor', 'selfcirc')">self-circ</button>
+                <button class="filter-btn" id="fb-reactor-rbmk" onclick="setFilter('reactor', 'rbmk')">RBMK</button>
+            </div>
+        </div>
+
+        <div class="layout">
+            <nav class="sidebar" id="sidebar">
+                <button class="nav-item" onclick="loadPage('intro')">Welcome</button>
+                <button class="nav-item" onclick="loadPage('plant-overview')">How the Plant Works</button>
+
+                <div class="nav-group-title">ops</div>
+                <button class="nav-item active" onclick="loadPage('startup')">Startup</button>
+                <button class="nav-item" onclick="loadPage('shutdown')">Shutdown</button>
+                <button class="nav-item" onclick="loadPage('operation')">Normal Operation</button>
+                <button class="nav-item" onclick="loadPage('emergencies')">Emergencies</button>
+
+                <div class="nav-group-title">reactor</div>
+                <button class="nav-item" onclick="loadPage('reactor-control')">Reactor Control</button>
+                <button class="nav-item" onclick="loadPage('xenon')">Xenon &amp; Iodine</button>
+                <button class="nav-item" onclick="loadPage('reactor-hall')">Reactor Hall &amp; Refueling</button>
+
+                <div class="nav-group-title">water</div>
+                <button class="nav-item" onclick="loadPage('mcc')">MCC - Cooling &amp; Water</button>
+                <button class="nav-item" onclick="loadPage('condenser')">Condenser &amp; Deaerator</button>
+                <button class="nav-item nav-u2" onclick="loadPage('u2-polishers')">CIX - Polishers</button>
+
+                <div class="nav-group-title">power</div>
+                <button class="nav-item nav-u2" onclick="loadPage('u2-tcr')">TCR - Turbine Control Room</button>
+                <button class="nav-item nav-u2" onclick="loadPage('u2-fwp')">FWP - Feedwater Pump Bay</button>
+                <button class="nav-item" onclick="loadPage('electrical')">Electrical &amp; EDG</button>
+
+                <div class="nav-group-title">support</div>
+                <button class="nav-item" onclick="loadPage('aux-systems')">RHR &amp; ECCS</button>
+                <button class="nav-item" onclick="loadPage('malfunctions')">Malfunctions</button>
+                <button class="nav-item" onclick="loadPage('u2-supervisor')">Supervisor Room</button>
+
+                <div class="nav-group-title">faults</div>
+                <button class="nav-item" onclick="loadPage('ts-reactor')">Reactor</button>
+                <button class="nav-item" onclick="loadPage('ts-cooling')">Cooling, Condenser &amp; Chemistry</button>
+                <button class="nav-item" onclick="loadPage('ts-turbine')">Turbine &amp; TCR</button>
+                <button class="nav-item" onclick="loadPage('ts-electrical')">Electrical &amp; EDG</button>
+
+                <div class="nav-group-title">reference</div>
+                <button class="nav-item" onclick="loadPage('limits')">Limits &amp; Setpoints</button>
+                <button class="nav-item" onclick="loadPage('points')">Points, Events &amp; Inspection</button>
+                <button class="nav-item" onclick="loadPage('reactor-types')">Reactor Types &amp; Server Config</button>
+                <button class="nav-item" onclick="loadPage('u2-differences')">U1 vs U2</button>
+                <button class="nav-item" onclick="loadPage('glossary')">Reference &amp; Glossary</button>
+            </nav>
+
+            <main class="content">
+                <div class="content-inner md" id="content">
+                    <div class="status">Loading…</div>
+                </div>
+            </main>
+        </div>
+
+        <script>
+            /* ==================================================================
+   ABBREVIATIONS DICT
+   Add an entry here and any occurrence in any MD file gets a tooltip.
+   ================================================================== */
+            const ABBR = {
+                RBWR: "Realistic Boiling Water Reactor",
+                BWR: "Boiling Water Reactor",
+                PWR: "Pressurized Water Reactor",
+                RBMK: "Reaktor Bolshoy Moshchnosti Kanalnyy (Soviet graphite-moderated reactor)",
+                RPV: "Reactor Pressure Vessel",
+                APRM: "Average Power Range Monitor",
+                LPRM: "Local Power Range Monitor",
+                SRM: "Source Range Monitor",
+                IPR: "Intermediate Power Range",
+                CRD: "Control Rod Drive",
+                CRDP: "Control Rod Drive Pump",
+                RWM: "Rod Worth Minimizer",
+                RCIC: "Reactor Core Isolation Cooling",
+                LPCI: "Low Pressure Coolant Injection",
+                RHR: "Residual Heat Removal",
+                MCR: "Main Control Room",
+                TCR: "Turbine Control Room",
+                FWP: "Feedwater Pump",
+                SJAE: "Steam Jet Air Ejector",
+                CAR: "Condenser Air Removal",
+                MCC: "Main Cooling Control",
+                CST: "Condensate Storage Tank",
+                EDG: "Emergency Diesel Generator",
+                CIX: "Condensate Ion eXchange",
+                ECCS: "Emergency Core Cooling System",
+                POAH: "Point Of Adding Heat",
+                APR: "Average Power Reactor",
+                HPFH: "High Pressure Feedwater Heater",
+                SCRAM: "Safety Control Rod Axe Man (rapid shutdown)",
+                "S/IAS": "Service / Instrument Air System",
+            };
+
+            /* ==================================================================
+   THEME + NERD TOGGLES (persisted)
+   ================================================================== */
+            function applyTheme(theme) {
+                document.body.classList.toggle("dark", theme === "dark");
+                document.getElementById("theme-label").textContent = theme;
+                document.getElementById("theme-toggle").classList.toggle("active", theme === "dark");
+                localStorage.setItem("rbwr-theme", theme);
+            }
+            function toggleTheme() {
+                const cur = localStorage.getItem("rbwr-theme") || "dark";
+                applyTheme(cur === "dark" ? "light" : "dark");
+            }
+            function applyNerd(on) {
+                document.body.classList.toggle("nerd", on);
+                document.getElementById("nerd-toggle").classList.toggle("active", on);
+                localStorage.setItem("rbwr-nerd", on ? "1" : "0");
+            }
+            function toggleNerd() {
+                applyNerd(!document.body.classList.contains("nerd"));
+            }
+
+            /* Init toggles on load */
+            applyTheme(localStorage.getItem("rbwr-theme") || "dark");
+            applyNerd(localStorage.getItem("rbwr-nerd") === "1");
+
+            /* ==================================================================
+   MARKDOWN RENDERER WITH CUSTOM BLOCKS
+   ================================================================== */
+
+            /* Custom marked renderer:
+   - Code blocks with language `checklist` → interactive checklist HTML
+   - Code blocks with language `limits`    → limits-grid HTML
+   - Code blocks with language `note|warn|crit` → callout HTML
+*/
+            const renderer = new marked.Renderer();
+            const origCode = renderer.code.bind(renderer);
+
+            renderer.code = function (code, lang) {
+                if (lang === "limits") {
+                    try {
+                        return renderLimits(JSON.parse(code));
+                    } catch (e) {
+                        return `<pre><code>limits parse error: ${e.message}\n\n${code}</code></pre>`;
+                    }
+                }
+                if (lang === "note" || lang === "warn" || lang === "crit") {
+                    const labels = { note: "note", warn: "warning", crit: "critical" };
+                    return `<div class="callout ${lang}"><span class="callout-label">${labels[lang]}</span>${marked.parseInline(code)}</div>`;
+                }
+                if (lang === "plant-diagram") {
+                    const W = 680,
+                        H = 450,
+                        uid = "pd" + Math.random().toString(36).slice(2, 6);
+                    const MK = `marker-end="url(#${uid})"`;
+                    /* Aligned pairs:
+       Reactor (x=20,w=150) ↕ FW Pumps (x=20,w=150)  → same center x=95
+       Turbine (x=240,w=150) ↕ Condenser (x=240,w=150) → same center x=315
+       Electrical (x=510,w=150) → detached, right side
+    */
+                    const nodes = [
+                        { label: "Reactor", sub: "control rods & recirc", page: "reactor-control", x: 20, y: 50, w: 150, h: 70 },
+                        { label: "Turbine", sub: "steam → shaft", page: "startup", x: 240, y: 50, w: 150, h: 70 },
+                        { label: "Electrical", sub: "buses & EDGs", page: "electrical", x: 510, y: 50, w: 150, h: 70 },
+                        { label: "Condenser", sub: "vacuum & cooling", page: "condenser", x: 240, y: 205, w: 150, h: 70 },
+                        { label: "Hotwell", sub: "collects condensate", page: "mcc", x: 530, y: 360, w: 130, h: 70 },
+                        { label: "Cond. Pumps", sub: "hotwell → deaerator", page: "mcc", x: 360, y: 360, w: 135, h: 70 },
+                        { label: "Deaerator", sub: "O₂ removal", page: "condenser", x: 200, y: 360, w: 130, h: 70 },
+                        { label: "FW Pumps", sub: "deaerator → reactor", page: "mcc", x: 20, y: 360, w: 150, h: 70 },
+                    ];
+                    const arrows = [
+                        { d: `M170,85 L240,85`, label: "steam", lx: 205, ly: 77 },
+                        { d: `M390,85 L510,85`, label: "shaft", lx: 450, ly: 77 },
+                        { d: `M315,120 L315,205`, label: "", lx: 0, ly: 0 },
+                        { d: `M315,275 L315,315 L595,315 L595,360`, label: "", lx: 0, ly: 0 },
+                        { d: `M530,395 L495,395`, label: "", lx: 0, ly: 0 },
+                        { d: `M360,395 L330,395`, label: "", lx: 0, ly: 0 },
+                        { d: `M200,395 L170,395`, label: "", lx: 0, ly: 0 },
+                        { d: `M95,360 L95,120`, label: "", lx: 0, ly: 0 },
+                    ];
+                    let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" style="display:block;width:100%;max-width:${W}px;margin:0 auto">
+<defs><marker id="${uid}" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><polygon points="0 0,7 3,0 6" fill="var(--tx)"/></marker></defs>`;
+                    arrows.forEach((a) => {
+                        svg += `<path d="${a.d}" fill="none" stroke="var(--tx)" stroke-width="2" ${MK}/>`;
+                        if (a.label)
+                            svg += `<text x="${a.lx}" y="${a.ly}" font-size="10" fill="var(--tx)" font-family="monospace" text-anchor="middle" opacity="0.5">${escapeHtml(a.label)}</text>`;
+                    });
+                    nodes.forEach((n) => {
+                        const cx = n.x + n.w / 2,
+                            cy = n.y + n.h / 2;
+                        svg += `<g onclick="loadPage('${n.page}')" style="cursor:pointer">
+<rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="6"
+  fill="var(--bg-panel)" stroke="var(--tx)" stroke-width="2"
+  onmouseenter="this.setAttribute('fill','var(--bg-soft)')"
+  onmouseleave="this.setAttribute('fill','var(--bg-panel)')"/>
+<text x="${cx}" y="${cy - 9}" dominant-baseline="middle" text-anchor="middle" font-family="monospace" font-size="13" fill="var(--tx)" font-weight="700" pointer-events="none">${escapeHtml(n.label)}</text>
+<text x="${cx}" y="${cy + 10}" dominant-baseline="middle" text-anchor="middle" font-family="monospace" font-size="10" fill="var(--tx)" opacity="0.6" pointer-events="none">${escapeHtml(n.sub)}</text>
+</g>`;
+                    });
+                    svg += "</svg>";
+                    return `<div style="background:var(--bg-soft);border:1px solid var(--br);border-radius:12px;padding:24px;margin:16px 0">${svg}</div>`;
+                }
+                if (lang === "flow") {
+                    const nodes = code
+                        .split(/→|->/)
+                        .map((s) => s.trim())
+                        .filter(Boolean);
+                    if (!nodes.length) return "";
+                    const PER_ROW = 4,
+                        NH = 40,
+                        AW = 30,
+                        PAD = 20,
+                        ROW_GAP = 50;
+                    const NW = Math.max(130, Math.max(...nodes.map((n) => n.length)) * 7 + 24);
+                    const cols = Math.min(PER_ROW, nodes.length);
+                    const rows = Math.ceil(nodes.length / cols);
+                    const W = cols * NW + (cols - 1) * AW + PAD * 2;
+                    const H = rows * NH + (rows - 1) * ROW_GAP + PAD * 2;
+                    const uid = "fc" + Math.random().toString(36).slice(2, 6);
+                    let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" style="display:block;width:100%;max-width:${W}px;margin:0 auto">
+<defs><marker id="${uid}" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0,6 3,0 6" fill="var(--tx)"/></marker></defs>`;
+                    const MK = `marker-end="url(#${uid})"`;
+                    for (let i = 0; i < nodes.length; i++) {
+                        const r = Math.floor(i / PER_ROW),
+                            c = i % PER_ROW;
+                        const x = PAD + c * (NW + AW),
+                            y = PAD + r * (NH + ROW_GAP);
+                        svg += `<rect x="${x}" y="${y}" width="${NW}" height="${NH}" rx="4" fill="var(--bg-panel)" stroke="var(--tx)" stroke-width="2"/>`;
+                        svg += `<text x="${x + NW / 2}" y="${y + NH / 2}" dominant-baseline="middle" text-anchor="middle" font-family="monospace" font-size="11" fill="var(--tx)" font-weight="600">${escapeHtml(nodes[i])}</text>`;
+                        if (i < nodes.length - 1) {
+                            const nr = Math.floor((i + 1) / PER_ROW),
+                                nc = (i + 1) % PER_ROW;
+                            const nx = PAD + nc * (NW + AW),
+                                ny = PAD + nr * (NH + ROW_GAP);
+                            const cy = y + NH / 2,
+                                ncy = ny + NH / 2;
+                            if (nr === r) {
+                                svg += `<line x1="${x + NW}" y1="${cy}" x2="${nx - 2}" y2="${cy}" stroke="var(--tx)" stroke-width="2" ${MK}/>`;
+                            } else {
+                                const midY = y + NH + ROW_GAP * 0.65;
+                                svg += `<path d="M${x + NW / 2},${y + NH} L${x + NW / 2},${midY} L4,${midY} L4,${ncy} L${nx - 2},${ncy}" fill="none" stroke="var(--tx)" stroke-width="2" ${MK}/>`;
+                            }
+                        }
+                    }
+                    svg += "</svg>";
+                    return `<div style="background:var(--bg-soft);border:1px solid var(--br);border-radius:10px;padding:20px;margin:16px 0">${svg}</div>`;
+                }
+                const opts = { renderer };
+                if (lang === "nerd") {
+                    return `<div class="nerd-block">${marked.parse(code, opts)}</div>`;
+                }
+                if (lang === "u2") return `<div class="u2-only">${marked.parse(code, opts)}</div>`;
+                if (lang === "u1") return `<div class="u1-only">${marked.parse(code, opts)}</div>`;
+                if (lang === "realistic") return `<div class="realistic-only">${marked.parse(code, opts)}</div>`;
+                if (lang === "simple") return `<div class="simple-only">${marked.parse(code, opts)}</div>`;
+                if (lang === "rbmk") return `<div class="rbmk-only">${marked.parse(code, opts)}</div>`;
+                if (lang === "stable") return `<div class="stable-only">${marked.parse(code, opts)}</div>`;
+                if (lang === "selfcirc") return `<div class="selfcirc-only">${marked.parse(code, opts)}</div>`;
+                if (lang === "classic") return `<div class="classic-only">${marked.parse(code, opts)}</div>`;
+                return origCode(code, lang);
+            };
+
+            /* ------------------------------------------------------------------
+   Cross-page link resolution
+
+   Build a title → slug map by reading the sidebar nav. That way the
+   map is always in sync with what's actually navigable.
+
+   Three cases the link renderer handles:
+     1. href is a known page slug (e.g. `[Foo](u1-startup)`) - explicit
+        override, useful when link text is ambiguous.
+     2. href is `#` or empty - look up the link text in the map.
+     3. Anything else (http, mailto, real anchors) - pass through.
+
+   First occurrence wins for duplicate titles (so the U1 entries beat
+   the U2 entries for plain "Startup" etc.; use the explicit form for
+   the others).
+   ------------------------------------------------------------------ */
+            const PAGE_SLUGS = new Set();
+            const PAGE_TITLE_TO_SLUG = {};
+            function normalizeTitle(s) {
+                return s.toLowerCase().replace(/\s+/g, " ").trim();
+            }
+            function buildPageMap() {
+                document.querySelectorAll(".nav-item").forEach((btn) => {
+                    const onclick = btn.getAttribute("onclick") || "";
+                    const m = onclick.match(/loadPage\('([^']+)'\)/);
+                    if (!m) return;
+                    const slug = m[1];
+                    PAGE_SLUGS.add(slug);
+                    const key = normalizeTitle(btn.textContent);
+                    if (!(key in PAGE_TITLE_TO_SLUG)) PAGE_TITLE_TO_SLUG[key] = slug;
+                });
+            }
+            buildPageMap();
+
+            /* Decode HTML entities (marked passes link text with entities already
+   escaped, so we need this for the lookup key). */
+            const _decoder = document.createElement("textarea");
+            function decodeEntities(s) {
+                _decoder.innerHTML = s;
+                return _decoder.value;
+            }
+
+            renderer.link = function (href, title, text) {
+                const titleAttr = title ? ` title="${escapeHtml(title)}"` : "";
+
+                // Real external / protocol links - open in a new tab, pass through.
+                if (/^(https?:|mailto:|tel:)/i.test(href)) {
+                    return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer"${titleAttr}>${text}</a>`;
+                }
+
+                // Try to resolve to a known page slug, with optional #anchor.
+                let slug = null;
+                let anchor = "";
+
+                if (href) {
+                    // Strip leading # for pure-anchor links, handle page#anchor format
+                    const noHash = href.replace(/^#/, "");
+                    const hashIdx = noHash.indexOf("#");
+                    const pagePart = hashIdx >= 0 ? noHash.slice(0, hashIdx) : noHash;
+                    anchor = hashIdx >= 0 ? noHash.slice(hashIdx + 1) : "";
+                    const candidate = pagePart.replace(/\.md$/, "");
+                    if (candidate && PAGE_SLUGS.has(candidate)) slug = candidate;
+                }
+
+                // Empty href - look up by link text
+                if (!slug && (!href || href === "#" || href === "")) {
+                    const plain = decodeEntities(text.replace(/<[^>]+>/g, ""));
+                    slug = PAGE_TITLE_TO_SLUG[normalizeTitle(plain)] || null;
+                }
+
+                if (slug) {
+                    const anchorAttr = anchor ? ` data-anchor="${escapeHtml(anchor)}"` : "";
+                    return `<a href="#${escapeHtml(slug)}" class="pagelink" data-page="${escapeHtml(slug)}"${anchorAttr}${titleAttr}>${text}</a>`;
+                }
+
+                // Couldn't resolve - leave a normal anchor (still dead, but at least
+                // not pretending to be a page link).
+                return `<a href="${escapeHtml(href || "#")}"${titleAttr}>${text}</a>`;
+            };
+
+            /* Markdown convention for procedure steps:
+   A plain ordered list with an optional blockquote immediately after each
+   item. The blockquote becomes the "why" (gated behind nerd mode). The
+   presence of at least one blockquote makes the whole list interactive.
+*/
+
+            function renderLimits(spec) {
+                // spec is array: [{ name, val, unit, tier }] where tier is "ok"|"warn"|"danger" or omitted
+                let html = '<div class="limits-grid">';
+                spec.forEach((l) => {
+                    const tier = l.tier ? ` ${l.tier}` : "";
+                    html += `<div class="limit-card${tier}">
+      <div class="limit-name">${escapeHtml(l.name)}</div>
+      <div class="limit-val">${escapeHtml(String(l.val))}<span class="limit-unit">${escapeHtml(l.unit || "")}</span></div>
+    </div>`;
+                });
+                html += "</div>";
+                return html;
+            }
+
+            function escapeHtml(s) {
+                return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+            }
+
+            /* Auto-wrap abbreviations after render. Walks text nodes only.
+   Excludes nodes inside <code>, <pre>, <abbr> and a few others. */
+            function wireAbbreviations(root) {
+                const skip = new Set(["CODE", "PRE", "ABBR", "SCRIPT", "STYLE", "BUTTON"]);
+                // Build a regex that matches any abbreviation as a whole word.
+                // Sort by length DESC so longer keys (S/IAS) match before shorter substrings.
+                const keys = Object.keys(ABBR).sort((a, b) => b.length - a.length);
+                // Escape regex special chars in keys
+                const escaped = keys.map((k) => k.replace(/[.*+?^${}()|[\]\\\/]/g, "\\$&"));
+                const re = new RegExp("\\b(" + escaped.join("|") + ")\\b", "g");
+
+                const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+                    acceptNode(node) {
+                        let p = node.parentElement;
+                        while (p && p !== root) {
+                            if (skip.has(p.tagName)) return NodeFilter.FILTER_REJECT;
+                            p = p.parentElement;
+                        }
+                        re.lastIndex = 0;
+                        return re.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+                    },
+                });
+
+                const targets = [];
+                let n;
+                while ((n = walker.nextNode())) targets.push(n);
+
+                targets.forEach((textNode) => {
+                    const text = textNode.nodeValue;
+                    re.lastIndex = 0;
+                    const frag = document.createDocumentFragment();
+                    let last = 0,
+                        m;
+                    while ((m = re.exec(text)) !== null) {
+                        if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+                        const abbr = document.createElement("abbr");
+                        abbr.setAttribute("data-tip", ABBR[m[1]]);
+                        abbr.textContent = m[1];
+                        frag.appendChild(abbr);
+                        last = m.index + m[1].length;
+                    }
+                    if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+                    textNode.parentNode.replaceChild(frag, textNode);
+                });
+            }
+
+            /* Post-process: any ordered list followed by blockquotes inside its <li>
+   gets the steps class, and the blockquote becomes a step-why div.
+   We mark a list as "steps" only if it has the class `steps` already
+   OR if at least one direct <li> contains a <blockquote> as a child. */
+            function wireSteps(root) {
+                const lists = root.querySelectorAll("ol");
+                lists.forEach((ol) => {
+                    let hasWhy = false;
+                    ol.querySelectorAll(":scope > li > blockquote").forEach((bq) => {
+                        hasWhy = true;
+                        const div = document.createElement("div");
+                        div.className = "step-why";
+                        div.innerHTML = bq.innerHTML;
+                        bq.replaceWith(div);
+                    });
+                    // Mark crit items: any <li> whose first paragraph starts with [!]
+                    ol.querySelectorAll(":scope > li").forEach((li) => {
+                        const firstText =
+                            li.firstChild && li.firstChild.nodeType === 3
+                                ? li.firstChild.nodeValue
+                                : li.querySelector(":scope > p")?.textContent || "";
+                        if (/^\s*\[!\]/.test(firstText)) {
+                            li.classList.add("crit");
+                            const p = li.querySelector(":scope > p");
+                            if (p) p.innerHTML = p.innerHTML.replace(/^\s*\[!\]\s*/, "");
+                            else if (li.firstChild && li.firstChild.nodeType === 3)
+                                li.firstChild.nodeValue = li.firstChild.nodeValue.replace(/^\s*\[!\]\s*/, "");
+                        }
+                    });
+                    if (hasWhy) ol.classList.add("steps");
+                });
+            }
+
+            /* ==================================================================
+   STEPS: interactive checking + progress + persistence
+   ================================================================== */
+            let _stepsPageName = "";
+
+            function wireStepsInteractive(root, pageName) {
+                _stepsPageName = pageName;
+                const allSteps = [...root.querySelectorAll(".md ol.steps > li")];
+                if (allSteps.length === 0) return;
+
+                // Assign a stable index to each step in document order
+                allSteps.forEach((li, idx) => {
+                    li.setAttribute("data-step", idx);
+                    li.addEventListener("click", (e) => {
+                        // Let links inside steps still work
+                        if (e.target.closest("a")) return;
+                        li.classList.toggle("done");
+                        saveStepsState();
+                        updateStepsProgress();
+                    });
+                });
+
+                // Restore saved done state for this page
+                try {
+                    const saved = JSON.parse(localStorage.getItem("rbwr-steps-" + pageName) || "[]");
+                    saved.forEach((idx) => {
+                        if (allSteps[idx]) allSteps[idx].classList.add("done");
+                    });
+                } catch (e) {
+                    /* ignore */
+                }
+
+                // Append a single progress bar at the very end of the page
+                const progress = document.createElement("div");
+                progress.className = "steps-progress";
+                progress.innerHTML = `
+    <div class="steps-progress-bar"><div class="steps-progress-fill" id="steps-fill" style="width:0%"></div></div>
+    <div class="steps-progress-label" id="steps-label">0 / ${allSteps.length}</div>
+    <button class="steps-progress-reset" onclick="resetSteps()">reset</button>
+  `;
+                root.appendChild(progress);
+
+                updateStepsProgress();
+            }
+
+            function updateStepsProgress() {
+                const steps = document.querySelectorAll(".md ol.steps > li");
+                const done = document.querySelectorAll(".md ol.steps > li.done").length;
+                const fill = document.getElementById("steps-fill");
+                const label = document.getElementById("steps-label");
+                if (fill) fill.style.width = (steps.length ? (100 * done) / steps.length : 0) + "%";
+                if (label) label.textContent = done + " / " + steps.length;
+            }
+
+            function saveStepsState() {
+                if (!_stepsPageName) return;
+                const done = [...document.querySelectorAll(".md ol.steps > li.done")]
+                    .map((el) => parseInt(el.getAttribute("data-step")))
+                    .filter((n) => !isNaN(n));
+                localStorage.setItem("rbwr-steps-" + _stepsPageName, JSON.stringify(done));
+            }
+
+            function resetSteps() {
+                document.querySelectorAll(".md ol.steps > li.done").forEach((li) => li.classList.remove("done"));
+                saveStepsState();
+                updateStepsProgress();
+            }
+
+            /* ==================================================================
+   FILTER TOGGLES (unit / mode / reactor)
+   ================================================================== */
+            const FILTERS = { unit: "u1", mode: "simple", reactor: "classic" };
+
+            function setFilter(type, val) {
+                FILTERS[type] = val;
+                applyFilters();
+                saveFilters();
+                // Update active states for this group's buttons
+                document.querySelectorAll(`[id^="fb-${type}-"]`).forEach((btn) => {
+                    btn.classList.toggle("active", btn.id === `fb-${type}-${val}`);
+                });
+            }
+
+            function applyFilters() {
+                const b = document.body;
+                [
+                    "unit-u1",
+                    "unit-u2",
+                    "mode-simple",
+                    "mode-realistic",
+                    "reactor-classic",
+                    "reactor-stable",
+                    "reactor-selfcirc",
+                    "reactor-rbmk",
+                ].forEach((c) => b.classList.remove(c));
+                b.classList.add("unit-" + FILTERS.unit);
+                b.classList.add("mode-" + FILTERS.mode);
+                b.classList.add("reactor-" + FILTERS.reactor);
+            }
+
+            function saveFilters() {
+                localStorage.setItem("rbwr-filters", JSON.stringify(FILTERS));
+            }
+
+            function loadFilters() {
+                const VALID = {
+                    unit: ["u1", "u2"],
+                    mode: ["simple", "realistic"],
+                    reactor: ["classic", "stable", "selfcirc", "rbmk"],
+                };
+                try {
+                    const saved = JSON.parse(localStorage.getItem("rbwr-filters") || "{}");
+                    Object.keys(VALID).forEach((k) => {
+                        if (VALID[k].includes(saved[k])) FILTERS[k] = saved[k];
+                    });
+                } catch (e) {}
+                applyFilters();
+                Object.entries(FILTERS).forEach(([type, val]) => {
+                    document.querySelectorAll(`[id^="fb-${type}-"]`).forEach((btn) => {
+                        btn.classList.toggle("active", btn.id === `fb-${type}-${val}`);
+                    });
+                });
+            }
+
+            /* ==================================================================
+   PAGE LOADER
+   ================================================================== */
+            async function loadPage(name, anchor) {
+                localStorage.setItem("rbwr-page", name);
+                const c = document.getElementById("content");
+                c.innerHTML = '<div class="status">Loading…</div>';
+                document.querySelectorAll(".nav-item").forEach((b) => b.classList.remove("active"));
+                const btn = [...document.querySelectorAll(".nav-item")].find(
+                    (b) => b.getAttribute("onclick") && b.getAttribute("onclick").includes(`'${name}'`),
+                );
+                if (btn) {
+                    btn.classList.add("active");
+                }
+                // Close mobile sidebar on navigation
+                document.getElementById("sidebar").classList.remove("open");
+
+                try {
+                    const res = await fetch(`${name}.md`);
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    const md = await res.text();
+                    const html = marked.parse(md, { renderer });
+                    c.innerHTML = html;
+                    wireSteps(c);
+                    wireAbbreviations(c);
+                    wireStepsInteractive(c, name);
+                    // Scroll to anchor if provided
+                    if (anchor) {
+                        const target = [...c.querySelectorAll("h2,h3")].find((h) =>
+                            h.textContent
+                                .toLowerCase()
+                                .replace(/[^a-z0-9]+/g, "-")
+                                .includes(anchor.toLowerCase().replace(/[^a-z0-9]+/g, "-")),
+                        );
+                        if (target) setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+                    } else {
+                        c.closest(".content").scrollTop = 0;
+                    }
+                } catch (e) {
+                    c.innerHTML = `<div class="status">Failed to load <code>${name}.md</code><br><br>${e.message}<br><br><em>Run <code>python3 -m http.server</code> in this folder, then open http://localhost:8000/</em></div>`;
+                }
+            }
+
+            /* Delegated click handler for in-document cross-page links.
+   The step click handler already bails out when the click target is
+   inside an <a>, so this composes cleanly with checklist items. */
+            document.getElementById("content").addEventListener("click", (e) => {
+                const link = e.target.closest("a.pagelink");
+                if (!link) return;
+                e.preventDefault();
+                const page = link.getAttribute("data-page");
+                const anchor = link.getAttribute("data-anchor") || "";
+                if (page) loadPage(page, anchor);
+            });
+
+            /* Sidebar toggle - mobile: drawer, desktop: collapse */
+            function toggleSidebar() {
+                if (window.innerWidth <= 768) {
+                    document.getElementById("sidebar").classList.toggle("open");
+                } else {
+                    const hidden = document.body.classList.toggle("sidebar-hidden");
+                    localStorage.setItem("rbwr-sidebar-hidden", hidden ? "1" : "0");
+                }
+            }
+            (function () {
+                if (localStorage.getItem("rbwr-sidebar-hidden") === "1") {
+                    document.body.classList.add("sidebar-hidden");
+                }
+            })();
+            document.addEventListener("click", (e) => {
+                const sidebar = document.getElementById("sidebar");
+                if (sidebar.classList.contains("open") && !sidebar.contains(e.target) && !e.target.closest(".menu-btn")) {
+                    sidebar.classList.remove("open");
+                }
+            });
+
+            /* Boot */
+            loadFilters();
+            loadPage(localStorage.getItem("rbwr-page") || "intro");
+        </script>
+    </body>
+</html>

@@ -2,6 +2,10 @@
 
 RCIC, LPCI, RHR, and Emergency Steam Relief. These are the last-resort cooling systems.
 
+```flow
+RCIC (any pressure) → Pressure <3 MPa → LPCI + RHR
+```
+
 ## RCIC (Reactor Core Isolation Cooling)
 
 Steam-driven feedwater turbopump. **Requires no electrical power**, driven purely by reactor steam, so it works during full blackouts. Enabling RCIC trips the turbine. The turbopump reaches up to 20,000 RPM and injects up to 2000 kg/s. When little steam remains, switch to RHR + LPCI.
