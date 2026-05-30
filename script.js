@@ -668,10 +668,9 @@ document.addEventListener("click", (e) => {
 /* Boot */
 loadFilters();
 
-// Determine initial page from the URL pathname (works for both / and /startup etc.)
-const path = window.location.pathname.replace(/\/+$/, ""); // strip trailing slash
+// Determine initial page from the current URL path
+const path = window.location.pathname.replace(/\/+$/, "");
 const initialPage = path === "" || path === "/" ? "intro" : path.replace(/^\//, "");
 loadPage(initialPage, null, false);
 
-// Start building search index in the background
 buildSearchIndex();

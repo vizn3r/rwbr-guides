@@ -7,6 +7,7 @@
         <meta http-equiv="Pragma" content="no-cache" />
         <meta http-equiv="Expires" content="0" />
         <title>RBWR Operator Manual</title>
+        <base href="/">
         <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
         <script src="theme.js"></script>
@@ -14,6 +15,12 @@
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
+        <!--
+            SPA fallback – served by GitHub Pages for any route that
+            doesn’t match a real file (like /startup). The base tag
+            keeps all assets loading from the root.
+            script.js reads the current URL path and loads the correct page.
+        -->
         <div class="topbar">
             <button class="menu-btn" onclick="toggleSidebar()">☰</button>
             <div class="topbar-title">RBWR Operator Manual</div>
