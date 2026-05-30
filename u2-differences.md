@@ -9,11 +9,11 @@ Unit 2 runs the same reactor model as Unit 1, so the underlying operations are s
 | Startup modes | Pull rods freely | SRM / IPR / Run. RWM enforces a one-rod-at-a-time pull pattern below 5% APRM |
 | IPR levels | 6 | 8 |
 | Core monitor | Group powers (%) | Fuel temperatures per group |
-| Turbine control | Single panel | Dedicated [Turbine Control Room](#) with a separate operator |
+| Turbine control | Single panel | Dedicated [Turbine Control Room](u2-tcr) with a separate operator |
 | Synchronization | Breaker 52G1 | Synchroscope alignment required for everyone, plus a precision valve |
-| Polishers | Two small levers | Full polisher control room with regeneration, conductivity lab, and the [FWP Bay](#) |
-| CRD system | Implicit | [2 CRDPs + Drive Water Flow + Hydraulic Accumulators](#) that must be filled before startup or after a SCRAM |
-| Emergency systems | Far-left MCR panel | On the Supervisor Desk. Draw from [Condensate Storage](#) tanks |
+| Polishers | Two small levers | Full polisher control room with regeneration, conductivity lab, and the [FWP Bay](u2-fwp) |
+| CRD system | Implicit | [2 CRDPs + Drive Water Flow + Hydraulic Accumulators](u2-reactor) that must be filled before startup or after a SCRAM |
+| Emergency systems | Far-left MCR panel | On the Supervisor Desk. Draw from [Condensate Storage](u2-condensate) tanks |
 | RCIC valves | 2 (Steam Relief + Inlet) | 1 (Inlet only) |
 | LPCI | Auto-activates at -4 m + low pressure | Manual only. CST selection valve. Pump speed cannot be throttled, can overflow |
 | Deaerator | No rupture disk | Breakable rupture disk that requires manual replacement |

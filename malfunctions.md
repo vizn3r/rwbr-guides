@@ -12,7 +12,7 @@ In U2: oil leaks in the turbine oil system, lube oil filter clogging, and the de
 
 ## Detection
 
-The **engineer's panel** shows the average system condition. Below 100% means something is faulty. Diagnose by comparison (Malfunctions wiki, v1.5.0):
+The **engineer's panel** shows the average system condition. Below 100% means something is faulty. Diagnose by comparison:
 
 ```nerd
 "Diagnose by comparison" is how real plant operators find degraded equipment too. In a perfectly balanced plant, identical machines (two feedwater pumps, two SJAEs) should give identical readings at identical settings. Any asymmetry is the signal. The technique is formalized in condition-monitoring maintenance programs: instead of changing components on a calendar schedule, you measure a parameter (differential pressure across a filter, vibration on a pump, etc.) and act when it exceeds threshold. The simulator uses exactly this model. SJAE diagnosis is the hardest case because a partial SJAE degradation barely moves condenser vacuum. This is the source-documented reason these are described in the manual as the most challenging system to diagnose.
@@ -96,7 +96,7 @@ A persistent MCC auto-mode makeup-water draw, with no other explanation, is a st
 1. Bring the reactor to **cold shutdown** (~50 °C).
    > RHR does this in 30-60 minutes from full operating temp.
 
-2. Call U1 maintenance (**0019**) or U2 maintenance (**0028**) and say **"leak"** then "yes".
+2. Call U1 Maintenance (**0019**) or TCR Maintenance (**0028**) and say **"leak"** then "yes".
 
 3. The technician runs the leak check. **Takes about 5 minutes.**
 
@@ -116,7 +116,7 @@ If the plant's average condition drops **below 80%**, the reactor goes down for 
 
 Either announced or unannounced.
 
-- **Announced:** prepare for islanding mode. See [Emergencies](#).
+- **Announced:** prepare for islanding mode. See [Emergencies](emergencies).
 - **Unannounced:** SCRAM the reactor. Cool initially with RCIC, then RHR powered by EDGs.
 
 If you successfully bring the reactor through an unannounced offsite event: **650 points** (minus what was earned during islanding).
@@ -125,7 +125,7 @@ If you successfully bring the reactor through an unannounced offsite event: **65
 
 ## Radioactivity
 
-Accumulates in the **turbine hall only** (as of V1.4). No penalty for contamination currently, subject to change.
+Accumulates in the **turbine hall only**. No penalty for contamination currently, subject to change.
 
 Radiation spikes if: hotwell leaks, deaerator leaks, steam leak in turbine hall (sealing pressure below 0.10 bar), or a tank overflows above +5 m.
 

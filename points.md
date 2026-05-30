@@ -123,7 +123,7 @@ Offsite power lost. Turbine desynchronizes. If load > 100 MW it trips outright.
 - **Safety Bus:** stays up via EDG
 - **Emergency Bus:** stays up via battery
 
-**Announced LOOP** (3-10 min warning): prepare for islanding. See [Emergencies](#).
+**Announced LOOP** (3-10 min warning): prepare for islanding. See [Emergencies](emergencies).
 **Surprise LOOP**: SCRAM and shut down if you can't island.
 
 Reward: **650 points** (minus what was earned during islanding).
@@ -134,7 +134,7 @@ Network demand points stop during islanding. Site demand and bonuses continue.
 
 ### Reactor Safety Test (U2 only)
 
-Chernobyl-style turbine rundown test. Reward: **500 points**. See [Emergencies](#) for the full checklist.
+Chernobyl-style turbine rundown test. Reward: **500 points**. See [Emergencies](emergencies) for the full checklist.
 
 ---
 

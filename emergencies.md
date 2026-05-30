@@ -8,10 +8,10 @@ APRM ≥ 125%, period ≤ 20 s, RPV level ≤ −4 m, condenser vacuum out of ra
 
 ```limits
 [
-  {"name":"RPV normal target",      "val":"+2",  "unit":"m"},
-  {"name":"SCRAM + auto emergency", "val":"−4",  "unit":"m", "tier":"danger"},
-  {"name":"MCC panel unlocks",      "val":"−3.9","unit":"m"},
-  {"name":"Fuel melt",              "val":"−8",  "unit":"m", "tier":"danger"}
+  {"name":"RPV normal target",        "val":"+2",  "unit":"m"},
+  {"name":"SCRAM + auto emergency",   "val":"−4",  "unit":"m", "tier":"danger"},
+  {"name":"MCC panel unlocks (U1)",   "val":"−3.9","unit":"m"},
+  {"name":"Fuel melt",                "val":"−8",  "unit":"m", "tier":"danger"}
 ]
 ```
 
@@ -31,7 +31,7 @@ APRM ≥ 125%, period ≤ 20 s, RPV level ≤ −4 m, condenser vacuum out of ra
 - Both draw from CSTs. Keep above 50% always.
 - Fuel melt = server ends for everyone.
 
-### Turbine damage (V1.7.5+)
+### Turbine damage
 Accumulates from incorrect handling. Below 60% health: Turbine Smoke can start. At 0% health, 30% chance of Oil Spray / Fire. Halon auto-trips both turbines, starts a 30-second countdown. Call points (TCR, Turbine Hall entrance, DA Hall entrance, FWP bay) to abort (smoke) or confirm (fire).
 ```
 
@@ -39,7 +39,23 @@ Accumulates from incorrect handling. Below 60% health: Turbine Smoke can start. 
 U2: Once Halon dispenses, Turbine Hall, Condenser Hall, and FWP Bay are unsafe for 5 minutes.
 ```
 
+```stable
+**Turbine trip:** APRM will not drop to 10% as fast as on Classic. Watch it — if it stays above 20% after the trip, insert rods manually. Do not assume the auto-reduction handled it.
+```
+
+```selfcirc
+**Turbine trip:** power drop is slower since recirc was not carrying the load. Insert rods immediately after any turbine trip rather than waiting for auto-reduction.
+```
+
+```rbmk
+**Turbine trip:** insert rods the moment the turbine trips. Do not wait. Steam voids in the core shift when turbine steam flow stops, and reactivity can spike briefly. Get rods in fast.
+
+**SCRAM from low power:** if you were below 700 MW when the SCRAM happened, restart is dangerous. Xenon will peak rapidly on a poisoned low-power core. Wait for xenon to decay before attempting restart — attempting to fight a xenon pit on RBMK by pulling rods is what caused Chernobyl.
+```
+
 ---
+
+## SCRAM response
 
 ## Checklist: SCRAM response
 
@@ -126,7 +142,7 @@ U2: Once Halon dispenses, Turbine Hall, Condenser Hall, and FWP Bay are unsafe f
 
 ## Islanding
 
-Both units can island. Isolates the unit from the offsite grid — both buses run on the turbine generator, not synced to the network. Turbine speed varies 3400-3800 RPM; site loads drag on it and the operator keeps it in band.
+Both units can island. Isolates the unit from the offsite grid: both buses run on the turbine generator, not synced to the network. Turbine speed varies 3400-3800 RPM; site loads drag on it and the operator keeps it in band.
 
 - If offsite loss is **announced**: prepare for islanding
 - If **unannounced**: SCRAM and recover (above)

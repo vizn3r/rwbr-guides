@@ -8,7 +8,7 @@ Generator output (after site loads) must be within **±50 MW** of demand.
 
 - Full manual: **1 point/sec** per unit
 - Each auto control enabled: +1 second delay per point cycle
-- See [Points & Earnings](#) for the full breakdown
+- See [Points & Earnings](points) for the full breakdown
 
 ## Demand-following
 
@@ -18,6 +18,22 @@ Generator output (after site loads) must be within **±50 MW** of demand.
   {"name":"90% APRM",  "val":"~1000","unit":"MW"},
   {"name":"100% APRM", "val":"~1200","unit":"MW"}
 ]
+```
+
+```classic
+Adjust demand with recirc flow above 30%, rods below. Both respond well. If turbine trips, APRM auto-reduces to 10% without manual input.
+```
+
+```stable
+Keep both recirc pumps running. If one trips, immediately reduce power target — the reactor cannot hold high power on one pump alone. After a turbine trip, APRM does not drop as fast as on Classic; watch it closely and insert rods manually if it stays high.
+```
+
+```selfcirc
+Use rods for all power changes. Adjusting recirc flow does almost nothing. After changing rod position, wait longer than usual before making another move — the reactor damps slowly and you will overshoot if you chase. Xenon oscillations are hard to predict; hold your setpoint and let it settle.
+```
+
+```rbmk
+Use rods to raise power, never recirc. To lower power slightly, you can increase recirc flow (it lowers reactivity on this type) — but rods are more predictable. Never let APRM drop below ~58% (700 MW thermal). If demand requires a big reduction, push through the 700 MW zone quickly with rod insertions. After any turbine trip, insert rods immediately — a brief power spike is possible as steam conditions in the core shift.
 ```
 
 1. Set rough reactor power so output ≈ demand.
@@ -37,7 +53,7 @@ Generator output (after site loads) must be within **±50 MW** of demand.
 Glance every few seconds at: APRM, period (near infinity at steady state), RPV level (target +2 m), main steam pressure (7100 kPa), generator load vs demand, condenser vacuum (40-70 mbar), deaerator temp (108 °C) and pressure (1.1-1.6 bar), engineer panel condition %.
 
 ```warn
-If the engineer panel drops below 100%, something is degrading. Glance at it routinely. See [Malfunctions](#) for the diagnostic procedure.
+If the engineer panel drops below 100%, something is degrading. Glance at it routinely. See [Malfunctions](malfunctions) for the diagnostic procedure.
 ```
 
 ## Xenon adjustments

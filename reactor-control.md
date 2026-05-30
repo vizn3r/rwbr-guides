@@ -49,7 +49,7 @@ P(t) = P0 · exp(t / T). A 20-second period doubles power in about 14 seconds. A
 ```
 
 ```crit
-After any SCRAM, reset IPR to level 1 before attempting restart. Otherwise it immediately SCRAMs because power starts at 0%.
+U2: After any SCRAM, reset IPR to level 1 before attempting restart. Otherwise it immediately SCRAMs because power starts at 0%.
 ```
 
 ## Core monitor
@@ -59,7 +59,7 @@ Shows percentage of rods pulled and percentage of maximum group power per group.
 ```
 
 ```u2
-Shows **fuel temperatures** per group. Use the same way: keep groups balanced so no group runs much hotter than its neighbors.
+Shows **fuel temperatures** per group instead of power percentages. Keep groups balanced: no group should run much hotter than its neighbors. Uneven fuel temperature indicates a rod imbalance or recirculation flow asymmetry that must be corrected.
 ```
 
 ## CRD system
@@ -71,11 +71,11 @@ U2 has an explicit Control Rod Drive system:
 - **Drive Water Flow valve:** sets drive water pressure
 - **Hydraulic Accumulators:** must be filled before startup or after any SCRAM
 
-Applies in realistic mode only. Simple startup mirrors U1.
+Applies in realistic mode only. In simple startup mode, rods can be pulled freely without the hydraulic accumulator requirement.
 ```
 
 ```crit
-After every SCRAM the hydraulic accumulators are empty. Refill via the CRD panel before attempting restart or rod movement will fail.
+U2: After every SCRAM the hydraulic accumulators are empty. Refill via the CRD panel before attempting restart or rod movement will fail.
 ```
 
 ## RWM (Rod Worth Minimizer)

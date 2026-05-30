@@ -32,6 +32,22 @@ U1 handles the SRM→IPR detector transition automatically. Step through 6 IPR l
 
 ### After sync
 Raise APRM to 20-30%, pressure to 7.1 MPa. Set deaerator inlet for 108 °C, outlet ≤1.6 bar. Switch reactor mode to **Circ**; recirculation controls power above 30% APRM.
+
+```classic
+At ~30% APRM, stop pulling rods and switch to recirculation. Raise recirc flow to hit your power target. Both rods and recirc work well from here.
+```
+
+```stable
+Keep both recirc pumps running from the start. Pull rods up to ~40% before crossing over to recirc — the reactor has no natural circulation to help you. Above 40%, raise recirc flow to climb to full power. If a recirc pump trips during the climb, stop and assess before continuing — you may not be able to hold that power level on one pump.
+```
+
+```selfcirc
+Pull rods all the way to your power target. Skip the recirc crossover — the reactor self-circulates and recirc barely changes power. Leave recirc at 28% and use rods for everything. The reactor will stabilize on its own after each rod movement, just give it more time than usual.
+```
+
+```rbmk
+Pull rods to power target using rods only. Do NOT increase recirc above 28% to raise power — it will lower power on this type. Once you reach ~700 MW thermal (~58% APRM), stay there or go higher. Do not linger below 700 MW. If you overshoot and need to come down slightly, you can briefly increase recirc flow to lower reactivity — but rods are safer.
+```
 ```
 
 ```u2
@@ -48,7 +64,7 @@ Same reactor as U1 with analog gauges, a dedicated TCR, and a selectable realist
 - Offsite power on Main Bus A
 
 ### Mode
-Select **Simple** (mirrors U1, no points bonus) or **Realistic** (RWM pattern + SRM/IPR/Run, 300 pts with auto / 900 pts fully manual including TCR) on the reactor mode panel before pulling rods.
+Select **Simple** (rods can be pulled freely, no RWM or mode transitions, no points bonus) or **Realistic** (RWM pattern + SRM/IPR/Run, 300 pts with auto / 900 pts fully manual including TCR) on the reactor mode panel before pulling rods.
 
 ### Turbine sync
 Synchroscope required for everyone. Counterclockwise = below 3600, clockwise = above. Wait for needle straight up, then press **Synchronize**.
@@ -109,7 +125,7 @@ U2 only: many auto systems don't auto-disable. Never enable condenser auto contr
     > Enough steam for 3600 RPM approach.
 
 15. [!] At 3600 RPM, coast in with valve; press **Breaker 52G1**.
-    > Operator+ rank also needs synchroscope at top.
+    > Senior Operator+ rank also needs synchroscope at top.
 
 16. Switch to onsite power; enable Bus A then Bus B.
     > Turbine generator now powers both buses.
@@ -158,7 +174,7 @@ U2 only: many auto systems don't auto-disable. Never enable condenser auto contr
    > Coast in. Sync fails if RPM is still changing.
 
 4. [!] Press **Breaker 52G1** at 3600 RPM.
-   > Operator+ rank needs synchroscope at top.
+   > Senior Operator+ rank needs synchroscope at top.
 
 5. Switch to onsite power; enable Bus A then Bus B.
 
@@ -166,7 +182,7 @@ U2 only: many auto systems don't auto-disable. Never enable condenser auto contr
 
 1. APRM to **20-30%**; pressure to **7.1 MPa**.
 2. Deaerator: inlet for **108 °C**, outlet ≤1.6 bar.
-3. Switch reactor mode to **Circ**; follow [Normal Operation](#).
+3. Switch reactor mode to **Circ**; follow [Normal Operation](operation).
 ```
 
 ```u2
@@ -232,7 +248,7 @@ U2 only: many auto systems don't auto-disable. Never enable condenser auto contr
 ## Checklist: U2 Reactor critical, Simple mode
 
 1. Pull rods gradually toward **10% APRM**. Watch period, stay above 100 s.
-   > Same as U1. No RWM pattern.
+   > No RWM pattern in simple mode; pull all rods freely.
 
 2. Wait for reactor temp above **100 °C** and pressure rising.
    > Nuclear heating confirmed.

@@ -14,7 +14,7 @@ U2 has an explicit Control Rod Drive system that U1 hides:
 After every SCRAM, the hydraulic accumulators are empty. Refill them via the CRD panel before attempting restart, or rod movement will fail.
 ```
 
-These controls apply in realistic startup mode. Simple startup mirrors U1's procedure.
+These controls apply in realistic startup mode only. In simple startup mode, rods can be pulled freely without the hydraulic accumulator requirement.
 
 ## Three reactor modes
 
@@ -71,8 +71,8 @@ Above 5% APRM, switch from IPR to Run. Run mode is unrestricted between 4% and 1
 
 ## Core monitor in U2
 
-Shows **fuel temperatures** per group (where U1 shows powers). Use the same way: keep groups balanced so no group runs much hotter than its neighbors. Vertical-power slice view is available the same way as in U1.
+Shows **fuel temperatures** per group rather than power percentages. Keep groups balanced: no group should run much hotter than its neighbors. Uneven fuel temperature indicates a rod imbalance or recirculation flow asymmetry. Vertical-power slice view is available: select a single rod on the diagram and a level on the vertical display to see power distribution along that rod's axis.
 
 ## Selective control
 
-Same physics as U1. See [Selective / Core Groups](#) for the position effects and balancing technique. U2 makes selective pulls faster than U1 since fewer-rods-selected gives quicker movement.
+The reactor is divided into 24 groups of 9 control rods each. Inside (core) groups heat quicker; outside groups heat slower; recirculation flow 1 boosts the upper core, flow 2 the lower core. See [Selective / Core Groups](selective-control) for the full position-effect guide and balancing technique. U2 selective pulls are faster because fewer rods selected means quicker movement, allowing individual group pulls like a real BWR startup.

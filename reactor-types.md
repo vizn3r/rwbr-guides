@@ -22,9 +22,9 @@ The config board (Server Configuration) lets you pick a reactor type. Changing t
 
 ## Self-Circulating
 
-- Negative void coefficient is essentially absent; primary reliance on natural circulation
+- Negative void coefficient is non-existent; primary reliance on natural self-circulation
 - Optional forced circulation for fine power adjustments
-- Higher operational instability until xenon-iodine equilibrium
+- Marginally stable; xenon poisoning can make it temporarily unstable
 - Behaves a lot like a PWR
 - Recommended for experienced operators
 
@@ -32,7 +32,7 @@ The config board (Server Configuration) lets you pick a reactor type. Changing t
 
 - Positive void coefficient: voids raise reactivity instead of lowering it
 - Inverse recirculation effects on power (forced flow removes voids → lowers reactivity)
-- Marginally stable, hard to control manually
+- Unstable by design; difficult to control manually
 - Implemented as a technical demonstration by developer Delfino
 - **Successful Turbine Rundown Test on this reactor type unlocks the "Turbine Rundown Success!" badge** (formerly called "Better than Chernobyl")
 

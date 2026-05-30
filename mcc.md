@@ -62,7 +62,7 @@ Two small levers on the MCC panel. One must always be on during operations.
 ```
 
 ```u2
-Handled from the dedicated Condenser Control Room. See [Polishers / CIX](#).
+Handled from the dedicated Condenser Control Room. See [Polishers / CIX](u2-polishers).
 ```
 
 ## Condensate Storage Tanks

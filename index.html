@@ -529,7 +529,53 @@ body.nerd ol.steps .step-why { display: block; }
   margin-bottom: 5px;
 }
 
-/* Checklist */
+/* ==================================================================
+   FLOWCHART
+   ================================================================== */
+.flowchart {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin: 16px 0;
+  padding: 20px;
+  background: var(--bg-soft);
+  border: 1px solid var(--br);
+  border-radius: var(--rl);
+  overflow-x: auto;
+}
+.flow-node {
+  background: var(--bg-panel);
+  border: 2px solid var(--tx);
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+}
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.flow-arrow::before {
+  content: '';
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--tx);
+}
+.flow-arrow::after {
+  content: '';
+  display: block;
+  width: 0; height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 7px solid var(--tx);
+}
+
 /* Loading and error states */
 .status {
   padding: 20px;
@@ -612,26 +658,16 @@ body.reactor-rbmk     .rbmk-only     { display: block; }
 /* ==================================================================
    PRINT: show only the content, drop all chrome
    ================================================================== */
-/* Sidebar desktop collapse button */
-.sidebar-collapse-btn {
-  background: transparent; border: none; color: var(--tx);
-  padding: 0 10px; cursor: pointer; font-size: 12px; line-height: var(--top-h);
-  display: flex; align-items: center;
-  transition: color 0.12s;
-}
-.sidebar-collapse-btn:hover { color: var(--tx); }
-
-/* Mobile sidebar */
+/* Sidebar toggle button — always visible */
 .menu-btn {
-  display: none;
+  display: flex;
   background: transparent; border: none; color: var(--tx);
-  padding: 0 14px; cursor: pointer; font-size: 20px; line-height: var(--top-h);
+  padding: 0 14px; cursor: pointer; font-size: 18px; line-height: var(--top-h);
   align-items: center;
 }
 .menu-btn:hover { color: var(--tx); }
 @media (max-width: 768px) {
   .menu-btn { display: flex; }
-  .sidebar-collapse-btn { display: none; }
   .sidebar {
     position: fixed; top: calc(var(--top-h) + var(--filter-h));
     left: 0; bottom: 0; z-index: 200;
@@ -653,8 +689,11 @@ body.reactor-rbmk     .rbmk-only     { display: block; }
 /* Nav unit-2 hiding */
 body.unit-u1 .nav-u2 { display: none !important; }
 
+/* Mode filter only relevant for U2 */
+body.unit-u1 .filter-group-mode { display: none !important; }
+
 @media print {
-  .topbar, .sidebar, .filter-bar, .menu-btn, .sidebar-collapse-btn { display: none !important; }
+  .topbar, .sidebar, .filter-bar, .menu-btn { display: none !important; }
   .layout { padding-top: 0 !important; height: auto; display: block; }
   .content { overflow: visible; padding: 0; }
   .content-inner { max-width: none; }
@@ -687,7 +726,6 @@ body.unit-u1 .nav-u2 { display: none !important; }
 
 <div class="topbar">
   <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-  <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" onclick="toggleSidebarDesktop()" title="Toggle sidebar">◀</button>
   <div class="topbar-title">RBWR Operator Manual</div>
   <div class="topbar-spacer"></div>
   <div class="topbar-toggles">
@@ -706,7 +744,7 @@ body.unit-u1 .nav-u2 { display: none !important; }
     <button class="filter-btn active" id="fb-unit-u1" onclick="setFilter('unit','u1')">U1</button>
     <button class="filter-btn"        id="fb-unit-u2" onclick="setFilter('unit','u2')">U2</button>
   </div>
-  <div class="filter-group">
+  <div class="filter-group filter-group-mode">
     <span class="filter-group-label">mode</span>
     <button class="filter-btn active" id="fb-mode-simple"    onclick="setFilter('mode','simple')">simple</button>
     <button class="filter-btn"        id="fb-mode-realistic" onclick="setFilter('mode','realistic')">realistic</button>
@@ -723,6 +761,7 @@ body.unit-u1 .nav-u2 { display: none !important; }
 <div class="layout">
   <nav class="sidebar" id="sidebar">
     <button class="nav-item" onclick="loadPage('intro')">Welcome</button>
+    <button class="nav-item" onclick="loadPage('plant-overview')">How the Plant Works</button>
 
     <div class="nav-group-title">operations</div>
     <button class="nav-item active" onclick="loadPage('startup')">Startup</button>
@@ -757,7 +796,8 @@ body.unit-u1 .nav-u2 { display: none !important; }
     <div class="nav-group-title">reference</div>
     <button class="nav-item" onclick="loadPage('limits')">Limits &amp; Setpoints</button>
     <button class="nav-item" onclick="loadPage('points')">Points, Events &amp; Inspection</button>
-    <button class="nav-item" onclick="loadPage('server-config')">Server Config &amp; Reactor Types</button>
+    <button class="nav-item" onclick="loadPage('reactor-types')">Reactor Types</button>
+    <button class="nav-item" onclick="loadPage('server-config')">Server Config</button>
     <button class="nav-item" onclick="loadPage('glossary')">Reference &amp; Glossary</button>
   </nav>
 
@@ -852,6 +892,86 @@ renderer.code = function(code, lang) {
   if (lang === 'note' || lang === 'warn' || lang === 'crit') {
     const labels = { note: 'note', warn: 'warning', crit: 'critical' };
     return `<div class="callout ${lang}"><span class="callout-label">${labels[lang]}</span>${marked.parseInline(code)}</div>`;
+  }
+  if (lang === 'plant-diagram') {
+    const W=680,H=450,uid='pd'+Math.random().toString(36).slice(2,6);
+    const MK=`marker-end="url(#${uid})"`;
+    /* Aligned pairs:
+       Reactor (x=20,w=150) ↕ FW Pumps (x=20,w=150)  → same center x=95
+       Turbine (x=240,w=150) ↕ Condenser (x=240,w=150) → same center x=315
+       Electrical (x=510,w=150) → detached, right side
+    */
+    const nodes=[
+      {label:'Reactor',    sub:'control rods & recirc', page:'reactor-control', x:20,  y:50,  w:150,h:70},
+      {label:'Turbine',    sub:'steam → shaft',         page:'startup',         x:240, y:50,  w:150,h:70},
+      {label:'Electrical', sub:'buses & EDGs',           page:'electrical',      x:510, y:50,  w:150,h:70},
+      {label:'Condenser',  sub:'vacuum & cooling',       page:'condenser',       x:240, y:205, w:150,h:70},
+      {label:'Hotwell',    sub:'collects condensate',    page:'mcc',             x:530, y:360, w:130,h:70},
+      {label:'Cond. Pumps',sub:'hotwell → deaerator',   page:'mcc',             x:360, y:360, w:135,h:70},
+      {label:'Deaerator',  sub:'O₂ removal',            page:'deaerator',       x:200, y:360, w:130,h:70},
+      {label:'FW Pumps',   sub:'deaerator → reactor',   page:'mcc',             x:20,  y:360, w:150,h:70},
+    ];
+    const arrows=[
+      {d:`M170,85 L240,85`,                     label:'steam',lx:205,ly:77},
+      {d:`M390,85 L510,85`,                     label:'shaft',lx:450,ly:77},
+      {d:`M315,120 L315,205`,                   label:'',lx:0,ly:0},
+      {d:`M315,275 L315,315 L595,315 L595,360`, label:'',lx:0,ly:0},
+      {d:`M530,395 L495,395`,                   label:'',lx:0,ly:0},
+      {d:`M360,395 L330,395`,                   label:'',lx:0,ly:0},
+      {d:`M200,395 L170,395`,                   label:'',lx:0,ly:0},
+      {d:`M95,360 L95,120`,                     label:'',lx:0,ly:0},
+    ];
+    let svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" style="display:block;width:100%;max-width:${W}px;margin:0 auto">
+<defs><marker id="${uid}" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><polygon points="0 0,7 3,0 6" fill="var(--tx)"/></marker></defs>`;
+    arrows.forEach(a=>{
+      svg+=`<path d="${a.d}" fill="none" stroke="var(--tx)" stroke-width="2" ${MK}/>`;
+      if(a.label) svg+=`<text x="${a.lx}" y="${a.ly}" font-size="10" fill="var(--tx)" font-family="monospace" text-anchor="middle" opacity="0.5">${escapeHtml(a.label)}</text>`;
+    });
+    nodes.forEach(n=>{
+      const cx=n.x+n.w/2,cy=n.y+n.h/2;
+      svg+=`<g onclick="loadPage('${n.page}')" style="cursor:pointer">
+<rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="6"
+  fill="var(--bg-panel)" stroke="var(--tx)" stroke-width="2"
+  onmouseenter="this.setAttribute('fill','var(--bg-soft)')"
+  onmouseleave="this.setAttribute('fill','var(--bg-panel)')"/>
+<text x="${cx}" y="${cy-9}" dominant-baseline="middle" text-anchor="middle" font-family="monospace" font-size="13" fill="var(--tx)" font-weight="700" pointer-events="none">${escapeHtml(n.label)}</text>
+<text x="${cx}" y="${cy+10}" dominant-baseline="middle" text-anchor="middle" font-family="monospace" font-size="10" fill="var(--tx)" opacity="0.6" pointer-events="none">${escapeHtml(n.sub)}</text>
+</g>`;
+    });
+    svg+='</svg>';
+    return `<div style="background:var(--bg-soft);border:1px solid var(--br);border-radius:12px;padding:24px;margin:16px 0">${svg}</div>`;
+  }
+  if (lang === 'flow') {
+    const nodes = code.split(/→|->/).map(s => s.trim()).filter(Boolean);
+    if (!nodes.length) return '';
+    const PER_ROW = 4, NW = 130, NH = 40, AW = 30, PAD = 20, ROW_GAP = 50;
+    const cols = Math.min(PER_ROW, nodes.length);
+    const rows = Math.ceil(nodes.length / cols);
+    const W = cols * NW + (cols - 1) * AW + PAD * 2;
+    const H = rows * NH + (rows - 1) * ROW_GAP + PAD * 2;
+    const uid = 'fc' + Math.random().toString(36).slice(2, 6);
+    let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" style="display:block;width:100%;max-width:${W}px;margin:0 auto">
+<defs><marker id="${uid}" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0,6 3,0 6" fill="var(--tx)"/></marker></defs>`;
+    const MK = `marker-end="url(#${uid})"`;
+    for (let i = 0; i < nodes.length; i++) {
+      const r = Math.floor(i / PER_ROW), c = i % PER_ROW;
+      const x = PAD + c * (NW + AW), y = PAD + r * (NH + ROW_GAP);
+      svg += `<rect x="${x}" y="${y}" width="${NW}" height="${NH}" rx="4" fill="var(--bg-panel)" stroke="var(--tx)" stroke-width="2"/>`;
+      svg += `<text x="${x+NW/2}" y="${y+NH/2}" dominant-baseline="middle" text-anchor="middle" font-family="monospace" font-size="11" fill="var(--tx)" font-weight="600">${escapeHtml(nodes[i])}</text>`;
+      if (i < nodes.length - 1) {
+        const nr = Math.floor((i+1)/PER_ROW), nc = (i+1)%PER_ROW;
+        const nx = PAD + nc*(NW+AW), ny = PAD + nr*(NH+ROW_GAP);
+        const cy = y+NH/2, ncy = ny+NH/2;
+        if (nr === r) {
+          svg += `<line x1="${x+NW}" y1="${cy}" x2="${nx-2}" y2="${cy}" stroke="var(--tx)" stroke-width="2" ${MK}/>`;
+        } else {
+          const midY = y + NH + ROW_GAP * 0.65;
+          svg += `<path d="M${x+NW/2},${y+NH} L${x+NW/2},${midY} L4,${midY} L4,${ncy} L${nx-2},${ncy}" fill="none" stroke="var(--tx)" stroke-width="2" ${MK}/>`;
+        }
+      }
+    }
+    svg += '</svg>';
+    return `<div style="background:var(--bg-soft);border:1px solid var(--br);border-radius:10px;padding:20px;margin:16px 0">${svg}</div>`;
   }
   const opts = { renderer };
   if (lang === 'nerd') {
@@ -1165,6 +1285,7 @@ function loadFilters() {
    PAGE LOADER
    ================================================================== */
 async function loadPage(name, anchor) {
+  localStorage.setItem('rbwr-page', name);
   const c = document.getElementById('content');
   c.innerHTML = '<div class="status">Loading…</div>';
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
@@ -1208,22 +1329,18 @@ document.getElementById('content').addEventListener('click', (e) => {
   if (page) loadPage(page, anchor);
 });
 
-/* Sidebar toggle (mobile) */
+/* Sidebar toggle — mobile: drawer, desktop: collapse */
 function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-}
-
-/* Sidebar collapse (desktop) */
-function toggleSidebarDesktop() {
-  const hidden = document.body.classList.toggle('sidebar-hidden');
-  document.getElementById('sidebar-collapse-btn').textContent = hidden ? '▶' : '◀';
-  localStorage.setItem('rbwr-sidebar-hidden', hidden ? '1' : '0');
+  if (window.innerWidth <= 768) {
+    document.getElementById('sidebar').classList.toggle('open');
+  } else {
+    const hidden = document.body.classList.toggle('sidebar-hidden');
+    localStorage.setItem('rbwr-sidebar-hidden', hidden ? '1' : '0');
+  }
 }
 (function() {
   if (localStorage.getItem('rbwr-sidebar-hidden') === '1') {
     document.body.classList.add('sidebar-hidden');
-    const btn = document.getElementById('sidebar-collapse-btn');
-    if (btn) btn.textContent = '▶';
   }
 })();
 document.addEventListener('click', e => {
@@ -1237,7 +1354,7 @@ document.addEventListener('click', e => {
 
 /* Boot */
 loadFilters();
-loadPage('intro');
+loadPage(localStorage.getItem('rbwr-page') || 'intro');
 </script>
 </body>
 </html>

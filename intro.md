@@ -1,18 +1,23 @@
 # Welcome
 
-The Realistic Boiling Water Reactor simulator is built to teach real BWR operations, simplified enough to learn but detailed enough to feel like running a plant. The goal is to operate the reactor properly, not to destroy it. No meltdown or explosion animations.
+Realistic BWR simulator. Click any system to go to its page.
+
+```plant-diagram
+```
 
 ## Where to start
 
-New to the game? Start on **Unit 1**, simpler unit, can be run alone, ideally on a private server. Settings has an interactive startup guide for automatic mode. Once comfortable with U1, move to **Unit 2**, same reactor in a more realistic environment: analog gauges, synchroscope, RWM rod-pull patterns, dedicated Turbine Control Room, advanced polisher system.
+Start on **Unit 1**: simpler, can be run solo, ideally on a private server. Settings has an auto startup guide. Once comfortable, move to **Unit 2**: analog gauges, synchroscope, RWM rod-pull patterns, dedicated TCR, advanced polisher system.
 
-Best with **3-4 players**. Solo is possible with auto systems, earns fewer points.
+Best with **3-4 players**. Solo works with auto systems but earns fewer points.
 
 ## How to use this manual
 
-Use the **unit toggle** (top bar) to filter content to your unit. Use **simple/realistic** to show the relevant startup mode. **Reactor type** filters physics-specific notes.
-
-Numbered steps with indented notes are interactive checklists, click a step to mark it done. **Nerd mode** (top right) reveals the physics "why" notes and detailed commentary.
+- **Unit toggle** (top bar): filters content to your unit
+- **Simple/realistic**: shows the relevant startup mode
+- **Reactor type**: filters physics-specific notes
+- Numbered steps with indented notes are interactive checklists; click a step to mark it done
+- **Nerd mode** (top right): reveals physics detail and commentary
 
 ## Suggested operator positions
 
@@ -23,15 +28,17 @@ Numbered steps with indented notes are interactive checklists, click a step to m
 - **CST, Deaerator, Condenser:** 1 person
 - **Feedwater:** 1 person
 
-**Shift Supervisor:** Supervisor Room. Monitors both units, watches demand, coordinates MCR ops, patrols. Senior Supervisor+ can use Unit Interlock. Don't get stuck in the room, patrol the plant.
+**Shift Supervisor:** Supervisor Room. Monitors both units, coordinates MCR ops, patrols. Senior Supervisor+ can use Unit Interlock. Don't get stuck in the room.
 
 ## Access requirements
 
 | Area | Requirement |
 |------|------------|
 | U1 MCR, Turbine Hall, Deaerator Hall | Any rank |
-| U2 MCR, TCR, CMCR, FWP Bay, EDG Bay | 5000 U1 points (Operator rank) |
-| Supervisor Room | Junior Supervisor |
-| Inspector Office + Tablet | Inspector rank |
-| Demand Manager (split demand) | Supervisor |
-| PA system + Unit Interlock | Senior Supervisor |
+| Aux Hall, EDG Building | Worker (2,000) |
+| U2 TCR, FW Pit, U2 MCR | Junior Operator (5,000); U2 MCR needs 5,000 U1 points |
+| Supervisor Room | Junior Supervisor (50,000) |
+| Inspector Office | Junior Inspector (500,000) |
+| Inspector Tablet | Inspector (1,000,000) |
+| Demand Manager (split demand) | Supervisor (100,000) |
+| PA system + Unit Interlock | Senior Supervisor (200,000) |

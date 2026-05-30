@@ -31,7 +31,7 @@ Bus selector switches are on the **left side of the panel**.
 Synchroscope rotates counterclockwise below 3600 RPM, clockwise above. Wait for the needle to point **straight up** before pressing sync.
 
 ```u1
-Press **Breaker 52G1**. Operator+ rank must have the synchroscope aligned. Below Operator rank, you can press the breaker without alignment. After sync: switch to onsite power → Bus A → Bus B.
+Press **Breaker 52G1**. Senior Operator+ rank must have the synchroscope aligned for the breaker to function. Below Senior Operator, you can press the breaker without alignment. After sync: switch to onsite power → Bus A → Bus B.
 ```
 
 ```u2

@@ -44,7 +44,7 @@ Three modes on the U2 auto control:
 ```
 
 ```selfcirc
-**Self-Circulating:** recirc regime has minimal effect. Recirculation barely changes power. Use absorber mode throughout most of the range. The Power-to-Flow map effectively becomes a flat line.
+**Self-Circulating:** recirc regime has minimal effect. Without a negative void coefficient, recirculation cannot drive meaningful power changes. It can still be used for fine adjustments, but absorber (rods) mode should be used for all significant power changes. The Power-to-Flow map provides little useful guidance on this reactor type.
 ```
 
 ```rbmk

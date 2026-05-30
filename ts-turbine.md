@@ -56,8 +56,8 @@ Turbine, sync, oil, sealing, generator. Most U2-specific but several apply to U1
 **Likely causes:**
 
 - RPM changing too fast, sync needs stability
-- Off-phase, synchroscope not at top (U2, and U1 for Operator+)
-- Operator+ rank on U1: synchroscope alignment is required
+- Off-phase, synchroscope not at top (U2, and U1 for Senior Operator+)
+- Senior Operator+ rank on U1: synchroscope alignment is required
 
 **Fix:**
 
@@ -80,7 +80,7 @@ Turbine, sync, oil, sealing, generator. Most U2-specific but several apply to U1
 **Likely causes:**
 
 - Acceleration too fast, passing through resonance bands too hard
-- Accumulated turbine damage (V1.7.5+)
+- Accumulated turbine damage
 - Casing not pre-heated above 240 °C before run-up
 - Hydraulic pressure unstable
 

@@ -9,7 +9,7 @@ U1 refueling has no physical walk-through. Call U1 maintenance (**0019**) and sa
 ```u2
 ## U2 Reactor Hall
 
-Added in the V2.0.0 update. A multi-story building containing U2's BWR and the Refueling Control Room. This is the only place where U2 can be physically refueled.
+A multi-story building containing U2's BWR and the Refueling Control Room. This is the only place where U2 can be physically refueled.
 ```
 
 ```limits
@@ -35,7 +35,7 @@ The Reactor Hall requires all Personal Protective Equipment. The large square ho
 
 - Estimated APRM **< 100%** (drift indicator the game tracks)
 - Cold shutdown: temp < 50 °C, pressure < 1000 kPa, 100% rod insertion
-- Refueling **called through U2 MCR Maintenance** (the line is 0028)
+- Refueling **called through U2 MCR Maintenance** (the line is 0029)
 
 Once those are met, the refueling controls unlock; the monitor displays the full checklist.
 

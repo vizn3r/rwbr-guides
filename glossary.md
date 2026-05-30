@@ -4,18 +4,25 @@
 
 | Number | Room / Function |
 |--------|-----------------|
-| 0010 | U1 MCR |
-| 0019 | U1 Maintenance, say "repair", "leak"/"yes", or "refuel" |
-| 0020 | U2 MCR |
-| 0021 | U2 TCR |
-| 0022 | U2 CMCR / Condenser Control Room |
-| 0024 | FWP Control Room |
-| 0027 | EDG fuel resupply, say "refuel" |
-| 0028 | U2 Maintenance, say "repair" (also for TCR oil leak checks) |
-| 0029 | U2 MCR Maintenance, say "refuel" |
-| 5682 | Grid Control, say "disconnect" before shutdown |
+| 0000 | Supervision Room |
+| 0010 | Unit 01 Main Control Room |
+| 0019 | Unit 01 Maintenance Crew |
+| 0020 | Unit 02 Main Control Room |
+| 0021 | Unit 02 Turbine Control Room |
+| 0022 | Unit 02 Condenser Control Room |
+| 0023 | Unit 02 EDG Bay |
+| 0024 | Unit 02 FWP Bay |
+| 0025 | Unit 02 Reactor Hall |
+| 0027 | Unit 02 EDG Maintenance Crew |
+| 0028 | Unit 02 TCR Maintenance Crew |
+| 0029 | Unit 02 Main Maintenance Crew |
+| 0040 | Deaerator Hall |
+| 0050 | Water Treatment Building |
+| 0100 | RBWR Human Resources |
+| 5682 | Grid Control |
+| *#99 | Fire Safety System Master Panel |
 
-Common scenarios: oil leak → call **0028** after turbine at 0 RPM. EDG fuel → **0027** say "refuel". Repair → tag the device first, then call maintenance and say "repair". Leak check → cold shutdown first, then call **0019** and say "leak"/"yes". Pre-planned shutdown → call **5682** and say "disconnect" first.
+Common scenarios: oil leak → call **0028**. EDG fuel → **0027** say "refuel". Repair → tag the device first, then call **0019** (U1) or **0029** (U2) and say "repair". Leak check → cold shutdown first, then call **0019** or **0029** and say "leak"/"yes". Shutdown → call **5682** and say "disconnect".
 
 ```warn
 Don't call "repair" before you've tagged the device. The technician needs the yellow tag, and a wrong tag voids the 100-point bonus.
@@ -35,25 +42,27 @@ Common pre-sets: U1/U2 Reactor Scram, Offsite Power Restored/Lost, Leak After Ho
 
 | Role | Points | Unlocks |
 |------|--------|---------|
-| Verified Player | Default | Standard access |
-| Junior Operator |, | EDG Building, LPCI/RCIC control, SCRAM authority |
-| Operator | 5,000 | U2 MCR, TCR, FWP, CMCR; U2 manual control locking; synchroscope required for U1 sync |
-| Senior Operator | 10,000 | Master Acknowledge |
-| Junior Supervisor | 20,000 | Supervisor Room; Cell Phone on spawn |
-| Supervisor | 50,000 | Demand Changing Panel |
-| Senior Supervisor | 100,000 | PA system; Unit Interlock |
-| Junior Inspector | 200,000 | Inspector Office |
-| Inspector | 500,000 | Inspector Tablet |
-| Senior Inspector | 1,000,000 | Plant Evacuation authority |
-| Chief Inspector | 2,000,000 | Status only |
-| Plant Manager | 5,000,000 | Plant Manager Office (~957 hrs at max rate) |
+| Visitor | 0 | Standard access |
+| Trainee | 1,000 | LPCI/RCIC control; Reactor SCRAM authority |
+| Worker | 2,000 | "Welcome to the Team!" badge; Aux Hall + EDG Building access |
+| Junior Operator | 5,000 | "You've Been Promoted!" badge; U2 TCR, FW Pit, U2 MCR access |
+| Operator | 10,000 | U2 manual control locking |
+| Senior Operator | 20,000 | Master Acknowledge; U1 synchroscope alignment required to sync |
+| Junior Supervisor | 50,000 | "Supervising Others" badge; Supervisor Room; Cell Phone on spawn |
+| Supervisor | 100,000 | Demand Changing Panel |
+| Senior Supervisor | 200,000 | PA system; Unit Interlock |
+| Junior Inspector | 500,000 | "Safety Inspector" badge; Inspector Office |
+| Inspector | 1,000,000 | Inspector Tablet |
+| Senior Inspector | 2,000,000 | Plant Evacuation authority |
+| Chief Inspector | 5,000,000 | Status only |
+| Plant Manager | 10,000,000 | Plant Manager Office |
 
 ### Badges
 
 | Badge | How |
 |-------|-----|
-| You've Been Hired! | Junior Operator rank |
-| You've Been Promoted! | Operator rank |
+| Welcome to the Team! | Worker rank |
+| You've Been Promoted! | Junior Operator rank |
 | Supervising Others | Junior Supervisor rank |
 | Safety Inspector | Junior Inspector rank |
 | The Chief | Chief Inspector rank |
@@ -87,7 +96,7 @@ Common pre-sets: U1/U2 Reactor Scram, Offsite Power Restored/Lost, Leak After Ho
 
 **Cell Phone:** Junior Supervisor+. Mobile phone with Do Not Disturb. Nokia 3310 model.
 
-**Inspector Tablet:** Inspector+. Used for Inspections, see [Points, Events & Inspection](#).
+**Inspector Tablet:** Inspector+. Used for Inspections, see [Points, Events & Inspection](points).
 
 **Guide Boards** (in-room authoritative checklists):
 
@@ -102,13 +111,11 @@ Common pre-sets: U1/U2 Reactor Scram, Offsite Power Restored/Lost, Leak After Ho
 
 ## Abbreviations
 
-Abbreviation reference. Every abbreviation in this list gets an automatic tooltip on hover.
-
-Abbreviation reference. Every abbreviation in the manual that's in this list also gets an automatic tooltip on hover, try it on any page.
+Every abbreviation in the manual that's in this list gets an automatic tooltip on hover, try it on any page.
 
 | Abbreviation | Full name |
 |--------------|-----------|
-| ADS  | Automatic Depressurization System (U2 only, V1.7.0+) |
+| ADS  | Automatic Depressurization System (U2 only) |
 | APR  | Average Power Reactor (legacy synonym for APRM in some screens) |
 | APRM | Average Power Range Monitor (average of LPRMs) |
 | BWR  | Boiling Water Reactor (GE BWR = General Electric BWR) |

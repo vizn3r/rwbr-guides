@@ -9,7 +9,7 @@ The reactor is divided into **24 groups of 9 control rods each**. Every group ca
 - **Circulation flow boosts reactivity locally.** Flow 1 boosts the upper part of the core, flow 2 the lower part.
 - **Warmer groups heat their neighbors.** Cold groups cool their neighbors. Imbalance can compound.
 
-The goal is to balance these differences so all groups operate at similar power levels. Or let the **automatic balancer** do it in U1.
+The goal is to balance these differences so all groups operate at similar power levels. The **automatic balancer** can handle this automatically (on both units, but not available during U2 realistic startup's SRM/IPR phase).
 
 ## Selecting groups
 
@@ -17,7 +17,7 @@ You can select any group or set of groups and operate them with the same lever a
 
 The indicator screen shows the percentage of rods pulled and the percentage of maximum group power.
 
-## Vertical power (v1.4+)
+## Vertical power
 
 Vertical power output is now simulated. Select a single rod on the diagram plus a level on the vertical display on the left. You get a vertical diagram for the selected rod and a horizontal slice at the chosen level. Colors are relative power compared to the selected rod/slice. Percentages are absolute power relative to the maximum reactor power.
 
