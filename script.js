@@ -349,15 +349,12 @@ function wireSteps(root) {
         // Mark crit items: any <li> whose first paragraph starts with [!]
         ol.querySelectorAll(":scope > li").forEach((li) => {
             const firstText =
-                li.firstChild && li.firstChild.nodeType === 3
-                    ? li.firstChild.nodeValue
-                    : li.querySelector(":scope > p")?.textContent || "";
+                li.firstChild && li.firstChild.nodeType === 3 ? li.firstChild.nodeValue : li.querySelector(":scope > p")?.textContent || "";
             if (/^\s*\[!\]/.test(firstText)) {
                 li.classList.add("crit");
                 const p = li.querySelector(":scope > p");
                 if (p) p.innerHTML = p.innerHTML.replace(/^\s*\[!\]\s*/, "");
-                else if (li.firstChild && li.firstChild.nodeType === 3)
-                    li.firstChild.nodeValue = li.firstChild.nodeValue.replace(/^\s*\[!\]\s*/, "");
+                else if (li.firstChild && li.firstChild.nodeType === 3) li.firstChild.nodeValue = li.firstChild.nodeValue.replace(/^\s*\[!\]\s*/, "");
             }
         });
         if (hasWhy) ol.classList.add("steps");
@@ -449,16 +446,9 @@ function setFilter(type, val) {
 
 function applyFilters() {
     const b = document.body;
-    [
-        "unit-u1",
-        "unit-u2",
-        "mode-simple",
-        "mode-realistic",
-        "reactor-classic",
-        "reactor-stable",
-        "reactor-selfcirc",
-        "reactor-rbmk",
-    ].forEach((c) => b.classList.remove(c));
+    ["unit-u1", "unit-u2", "mode-simple", "mode-realistic", "reactor-classic", "reactor-stable", "reactor-selfcirc", "reactor-rbmk"].forEach((c) =>
+        b.classList.remove(c),
+    );
     b.classList.add("unit-" + FILTERS.unit);
     b.classList.add("mode-" + FILTERS.mode);
     b.classList.add("reactor-" + FILTERS.reactor);
@@ -500,14 +490,19 @@ async function loadPageContent(page) {
         const res = await fetch(`${page}.md`);
         if (!res.ok) return "";
         const text = await res.text();
-        const plain = text.replace(/[#*`\[\]()!>]/g, " ").replace(/\s+/g, " ").toLowerCase();
+        const plain = text
+            .replace(/[#*`\[\]()!>]/g, " ")
+            .replace(/\s+/g, " ")
+            .toLowerCase();
         searchCache[page] = plain;
         return plain;
-    } catch(e) { return ""; }
+    } catch (e) {
+        return "";
+    }
 }
 
 async function buildSearchIndex() {
-    const pages = [...document.querySelectorAll(".nav-item")].map(btn => btn.dataset.page).filter(Boolean);
+    const pages = [...document.querySelectorAll(".nav-item")].map((btn) => btn.dataset.page).filter(Boolean);
     for (let page of pages) {
         const content = await loadPageContent(page);
         const title = document.querySelector(`.nav-item[data-page="${page}"]`)?.textContent.trim() || page;
@@ -520,7 +515,8 @@ function search(query) {
     query = query.toLowerCase();
     const results = [];
     for (let [page, idx] of Object.entries(searchIndex)) {
-        let score = 0, snippet = "";
+        let score = 0,
+            snippet = "";
         if (idx.title.includes(query)) score += 10;
         if (idx.content.includes(query)) {
             score += 5;
@@ -537,7 +533,7 @@ function search(query) {
             results.push({ page, title: titleFull, snippet: snippet || `Match in ${titleFull}`, score });
         }
     }
-    results.sort((a,b) => b.score - a.score);
+    results.sort((a, b) => b.score - a.score);
     return results.slice(0, 12);
 }
 
@@ -549,18 +545,25 @@ searchInput.addEventListener("input", () => {
     clearTimeout(searchDebounce);
     searchDebounce = setTimeout(async () => {
         const query = searchInput.value.trim();
-        if (!query) { searchResultsDiv.classList.remove("show"); return; }
+        if (!query) {
+            searchResultsDiv.classList.remove("show");
+            return;
+        }
         if (Object.keys(searchIndex).length === 0) await buildSearchIndex();
         const results = search(query);
         if (results.length === 0) {
             searchResultsDiv.innerHTML = '<div class="search-result-item">No results</div>';
         } else {
-            searchResultsDiv.innerHTML = results.map(r => `
+            searchResultsDiv.innerHTML = results
+                .map(
+                    (r) => `
                 <div class="search-result-item" data-page="${r.page}">
                     <div class="search-result-title">${escapeHtml(r.title)}</div>
                     <div class="search-result-snippet">${r.snippet}</div>
                 </div>
-            `).join("");
+            `,
+                )
+                .join("");
         }
         searchResultsDiv.classList.add("show");
     }, 200);
@@ -665,18 +668,10 @@ document.addEventListener("click", (e) => {
 /* Boot */
 loadFilters();
 
-// Handle redirect from 404.html (GitHub Pages SPA routing)
-(function() {
-    const redirect = sessionStorage.getItem('rbwr-redirect');
-    if (redirect) {
-        sessionStorage.removeItem('rbwr-redirect');
-        const page = redirect.replace(/^\//, '') || 'intro';
-        loadPage(page, null, false);
-        return;
-    }
-    // Normal initial load from URL path
-    const initialPage = window.location.pathname.slice(1) || "intro";
-    loadPage(initialPage, null, false);
-})();
+// Determine initial page from the URL pathname (works for both / and /startup etc.)
+const path = window.location.pathname.replace(/\/+$/, ""); // strip trailing slash
+const initialPage = path === "" || path === "/" ? "intro" : path.replace(/^\//, "");
+loadPage(initialPage, null, false);
 
+// Start building search index in the background
 buildSearchIndex();
