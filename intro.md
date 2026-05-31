@@ -2,9 +2,6 @@
 
 Realistic BWR simulator. Click any system to go to its page.
 
-```plant-diagram
-```
-
 ## Where to start
 
 Start on **Unit 1**: simpler, can be run solo, ideally on a private server. Settings has an auto startup guide. Once comfortable, move to **Unit 2**: analog gauges, synchroscope, RWM rod-pull patterns, dedicated TCR, advanced polisher system.
@@ -32,13 +29,13 @@ Best with **3-4 players**. Solo works with auto systems but earns fewer points.
 
 ## Access requirements
 
-| Area | Requirement |
-|------|------------|
-| U1 MCR, Turbine Hall, Deaerator Hall | Any rank |
-| Aux Hall, EDG Building | Worker (2,000) |
-| U2 TCR, FW Pit, U2 MCR | Junior Operator (5,000); U2 MCR needs 5,000 U1 points |
-| Supervisor Room | Junior Supervisor (50,000) |
-| Inspector Office | Junior Inspector (500,000) |
-| Inspector Tablet | Inspector (1,000,000) |
-| Demand Manager (split demand) | Supervisor (100,000) |
-| PA system + Unit Interlock | Senior Supervisor (200,000) |
+| Area                                 | Requirement                                           |
+| ------------------------------------ | ----------------------------------------------------- |
+| U1 MCR, Turbine Hall, Deaerator Hall | Any rank                                              |
+| Aux Hall, EDG Building               | Worker (2,000)                                        |
+| U2 TCR, FW Pit, U2 MCR               | Junior Operator (5,000); U2 MCR needs 5,000 U1 points |
+| Supervisor Room                      | Junior Supervisor (50,000)                            |
+| Inspector Office                     | Junior Inspector (500,000)                            |
+| Inspector Tablet                     | Inspector (1,000,000)                                 |
+| Demand Manager (split demand)        | Supervisor (100,000)                                  |
+| PA system + Unit Interlock           | Senior Supervisor (200,000)                           |

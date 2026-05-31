@@ -96,63 +96,90 @@ body {
 .search-wrapper {
     position: relative;
     margin-left: 12px;
-    flex: 0 1 260px;
+    flex: 0 1 280px;
 }
 .search-input {
     width: 100%;
-    padding: 4px 10px;
-    font-family: var(--mono);
-    font-size: 12px;
+    padding: 6px 12px;
+    font-family: var(--font);
+    font-size: 13px;
     background: var(--bg-soft);
     color: var(--tx);
     border: 1px solid var(--br);
-    border-radius: var(--r);
+    border-radius: 8px;
     outline: none;
-    transition: border 0.15s;
+    transition:
+        border-color 0.15s,
+        box-shadow 0.15s;
+}
+.search-input::placeholder {
+    color: var(--tx-mute);
+    opacity: 0.7;
 }
 .search-input:focus {
-    border-color: var(--br-strong);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--info-bg);
 }
 .search-results {
     position: absolute;
-    top: calc(100% + 4px);
+    top: calc(100% + 6px);
     left: 0;
     right: 0;
     background: var(--bg-panel);
     border: 1px solid var(--br);
-    border-radius: var(--r);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
     z-index: 300;
     display: none;
-    max-height: 320px;
+    max-height: 360px;
     overflow-y: auto;
+    padding: 5px;
 }
 .search-results.show {
     display: block;
 }
 .search-result-item {
-    padding: 6px 12px;
+    padding: 8px 11px;
     cursor: pointer;
-    border-bottom: 1px solid var(--br);
+    border-radius: 7px;
 }
-.search-result-item:last-child {
-    border-bottom: none;
+.search-result-item + .search-result-item {
+    margin-top: 2px;
 }
 .search-result-item:hover {
     background: var(--bg-soft);
 }
 .search-result-title {
-    font-family: var(--mono);
-    font-size: 12px;
+    font-family: var(--font);
+    font-size: 13px;
     font-weight: 600;
+    color: var(--tx);
 }
 .search-result-snippet {
-    font-size: 11px;
+    font-size: 12px;
+    line-height: 1.45;
     color: var(--tx-mute);
-    margin-top: 2px;
+    margin-top: 3px;
 }
 .search-result-snippet strong {
-    color: var(--accent);
+    color: var(--info-br);
+    font-weight: 700;
+}
+
+/* Flash a target element after a search jump */
+@keyframes flash-hit {
+    0% {
+        background: var(--info-bg);
+        box-shadow: 0 0 0 5px var(--info-bg);
+    }
+    100% {
+        background: transparent;
+        box-shadow: 0 0 0 5px transparent;
+    }
+}
+.flash-hit {
+    animation: flash-hit 1.2s ease-out;
+    border-radius: 4px;
 }
 
 /* ---- THEME BUTTONS ---- */
@@ -681,49 +708,170 @@ body.nerd ol.steps .step-why {
 /* ==================================================================
    FLOWCHART
    ================================================================== */
-.flowchart {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    margin: 16px 0;
-    padding: 20px;
+/* ==================================================================
+   FLOW DIAGRAMS
+   Rendered from a ```flow``` block as an SVG: boxes joined by arrows,
+   serpentine wrap. Hover highlights a step; click traces progress.
+   ================================================================== */
+.flow {
+    margin: 18px 0;
+    padding: 18px 20px;
     background: var(--bg-soft);
     border: 1px solid var(--br);
     border-radius: var(--rl);
     overflow-x: auto;
 }
-.flow-node {
-    background: var(--bg-panel);
-    border: 2px solid var(--tx);
-    border-radius: 4px;
-    padding: 8px 16px;
+.flow-svg {
+    display: block;
+}
+.flow-box {
+    cursor: pointer;
+    outline: none;
+}
+.flow-box rect {
+    fill: var(--bg-panel);
+    stroke: var(--tx);
+    stroke-width: 1.8;
+    transition:
+        fill 0.15s ease,
+        stroke 0.15s ease,
+        stroke-width 0.15s ease;
+}
+.flow-box text {
+    fill: var(--tx);
     font-family: var(--mono);
     font-size: 12px;
-    font-weight: 600;
-    white-space: nowrap;
-    position: relative;
-    z-index: 1;
+    font-weight: 700;
+    pointer-events: none;
 }
-.flow-arrow {
+.flow-conn {
+    transition: stroke 0.15s ease;
+}
+/* Click a step to trace the path up to it */
+.flow-box.on rect {
+    fill: var(--info-bg);
+    stroke: var(--info-br);
+    stroke-width: 2.4;
+}
+.flow-conn.on {
+    stroke: var(--info-br);
+}
+.flow-elabel {
+    fill: var(--tx);
+    opacity: 0.6;
+    font-family: var(--mono);
+    font-size: 10px;
+}
+
+/* Markdown body links: same color as the text, just underlined (no blue) */
+.content-inner.md a {
+    color: var(--tx);
+    text-decoration: underline;
+}
+
+/* OLED: the dark element backgrounds are invisible on pure black, so use outlines */
+html[data-theme="oled"] .callout,
+html[data-theme="oled"] .limit-card.ok,
+html[data-theme="oled"] .limit-card.warn,
+html[data-theme="oled"] .limit-card.danger,
+html[data-theme="oled"] .nerd-block {
+    background: transparent;
+}
+
+/* svgview: an inlined SVG file cropped to a given viewBox window */
+.svgview {
+    background: var(--bg-panel);
+    border: 1px solid var(--br);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 16px 0;
+    overflow: hidden;
+}
+.svgview svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Global plant map drawer */
+.plantmap {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 150;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+}
+.plantmap > * {
+    pointer-events: auto;
+}
+.plantmap-body {
+    height: 65vh;
+    overflow: hidden;
+    position: relative;
+    background: #121212;
+    border-top: 1px solid var(--br-strong);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.25);
+}
+.plantmap-viewport {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    cursor: grab;
+    background: #121212;
+}
+.plantmap-viewport:active {
+    cursor: grabbing;
+}
+.plantmap-controls {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    display: flex;
+    gap: 6px;
+    z-index: 2;
+}
+.plantmap-controls button {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--bg-soft);
+    color: var(--tx);
+    border: 1px solid var(--br);
+    border-radius: var(--r);
+    padding: 4px 10px;
+    cursor: pointer;
+}
+.plantmap-controls button:hover {
+    border-color: var(--br-strong);
+}
+.plantmap-handle {
+    order: -1;
+    align-self: center;
     display: flex;
     align-items: center;
-    flex-shrink: 0;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--tx);
+    background: var(--bg-soft);
+    border: 1px solid var(--br-strong);
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    padding: 4px 16px;
+    cursor: ns-resize;
+    touch-action: none;
+    user-select: none;
+    margin-bottom: -1px;
 }
-.flow-arrow::before {
-    content: "";
-    display: block;
-    width: 22px;
-    height: 2px;
-    background: var(--tx);
-}
-.flow-arrow::after {
-    content: "";
-    display: block;
-    width: 0;
-    height: 0;
-    border-top: 5px solid transparent;
-    border-bottom: 5px solid transparent;
-    border-left: 7px solid var(--tx);
+.plantmap-grip {
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--br-strong);
 }
 
 /* Loading and error states */

@@ -21,7 +21,7 @@ Generator output (after site loads) must be within **±50 MW** of demand.
 ```
 
 ```flow
-Set Reactor Power → Hold 7.1 MPa → Match Demand → Small Trim → repeat
+Set Reactor Power → Hold 7.1 MPa → Match Demand → Small Trim
 ```
 
 ```classic

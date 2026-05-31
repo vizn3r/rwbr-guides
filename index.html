@@ -103,6 +103,18 @@
             </main>
         </div>
 
+        <div id="plantmap" class="plantmap">
+            <div class="plantmap-body">
+                <div class="plantmap-controls">
+                    <button onclick="plantMapZoom(1.25)" title="Zoom in">+</button>
+                    <button onclick="plantMapZoom(0.8)" title="Zoom out">&minus;</button>
+                    <button onclick="plantMapReset()" title="Reset view">reset</button>
+                </div>
+                <div class="plantmap-viewport" id="plantmapViewport"></div>
+            </div>
+            <div class="plantmap-handle" id="plantmapHandle"><span class="plantmap-grip"></span>Reactor Map</div>
+        </div>
+
         <script src="script.js"></script>
     </body>
 </html>

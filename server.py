@@ -10,12 +10,19 @@ Simulates GitHub Pages hosting with SPA routing via custom 404.html.
 import os
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
-PORT = 8000
-DIRECTORY = "."
+PORT = 8080
+DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 
 class GHPagesHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
+
+    def end_headers(self):
+        # Dev: never cache, so edits to js/css/md/svg always show on reload.
+        self.send_header("Cache-Control", "no-store, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        super().end_headers()
 
     def do_GET(self):
         # If the path is exactly /404.html, serve it normally (status 200)
@@ -23,8 +30,11 @@ class GHPagesHandler(SimpleHTTPRequestHandler):
             self.path = "/404.html"
             return super().do_GET()
 
-        # Check if the requested path corresponds to an actual file
+        # Check if the requested path corresponds to an actual file (or a
+        # directory with an index.html, e.g. the root "/").
         requested_file = self.translate_path(self.path)
+        if os.path.isdir(requested_file):
+            requested_file = os.path.join(requested_file, "index.html")
         if os.path.isfile(requested_file):
             # File exists – serve normally
             super().do_GET()
